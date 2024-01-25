@@ -21,13 +21,13 @@ public class TasksManagementController : ControllerBase
         _usercontext = context;
     }
 
-/// <summary>
-/// 
-/// </summary>
-/// <returns></returns>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public Task<List<Utilisateur>> Get() =>
-    _usercontext.Utilisateurs.OrderBy(u => u.Nom).ToListAsync();
+    _usercontext.Utilisateurs.OrderBy(u => u.Matricule).ToListAsync();
 
     // [HttpPost]
     // public IActionResult AddContains()
@@ -35,4 +35,25 @@ public class TasksManagementController : ControllerBase
     //     var tache = "";
     //     return tache;
     // }
+
+    /// <summary>
+    /// On veut supprimer une tache à l'aide de son matricule
+    /// </summary>
+    /// <param name="Matricule"></param>
+    /// <returns></returns>
+    [HttpDelete("{Matricule}")]
+    public async Task<IActionResult> Delete(string Matricule)
+    {
+        var item = await _usercontext.Taches.FindAsync(Matricule);
+
+        if (item is null)
+        {
+            return NotFound();
+        }
+
+        _usercontext.Taches.Remove(item);
+        await _usercontext.SaveChangesAsync();
+
+        return NoContent();
+    }
 }

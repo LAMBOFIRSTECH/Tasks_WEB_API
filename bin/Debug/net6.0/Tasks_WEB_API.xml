@@ -10,5 +10,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.Delete(System.String)">
+            <summary>
+            On veut supprimer une tache à l'aide de son matricule
+            </summary>
+            <param name="Matricule"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
