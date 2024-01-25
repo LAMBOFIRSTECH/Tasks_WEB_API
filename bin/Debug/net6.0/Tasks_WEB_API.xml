@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tasks_WEB_API</name>
+    </assembly>
+    <members>
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.Get">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
