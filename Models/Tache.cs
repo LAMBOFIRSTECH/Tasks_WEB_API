@@ -5,6 +5,6 @@ public class Tache
     public string? Titre { get; set; }
 
     public string? Summary { get; set; }
-    public List<Tache>? Taches { get; set; }
+   // public List<Tache>? Taches { get; set; }
     public DateTime Date { get; set; }
 }

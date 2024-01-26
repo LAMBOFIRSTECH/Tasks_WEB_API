@@ -4,15 +4,28 @@
         <name>Tasks_WEB_API</name>
     </assembly>
     <members>
-        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.Get">
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.Get">
             <summary>
             
             </summary>
             <returns>Liste de tous les utilisateurs </returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.Delete(System.Int32)">
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.SelectUser(System.Int32)">
             <summary>
-            On veut supprimer une tache à l'aide de son ID.
+            
+            </summary>
+            <param name="ID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.AddContains">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.Delete(System.Int32)">
+            <summary>
+            On veut supprimer une tache à l'aide de son Matricule.
             </summary>
             <param name="ID"></param>
             <returns></returns>

@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen(con =>
 {
     con.SwaggerDoc("1.0", new OpenApiInfo
     {
-        Title = "TasksManagement Api",
+        Title = "DailyTasks | Api",
         Description = "An ASP.NET Core Web API for managing Tasks App",
         Version = "1.0",
         Contact = new OpenApiContact
@@ -41,7 +41,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<TasksManagementContext>(opt =>
+builder.Services.AddDbContext<DailyTasksContext>(opt =>
      opt.UseInMemoryDatabase("Utilisateur")); //Contexte de base de données
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -53,8 +53,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(con =>
     {
-        con.SwaggerEndpoint("/swagger/1.0/swagger.json", "Tasks Management API");
-        con.SwaggerEndpoint("/swagger/1.1/swagger.json", "Tasks API");
+        con.SwaggerEndpoint("/swagger/1.0/swagger.json", "Daily Tasks Management API");
+        //con.SwaggerEndpoint("/swagger/1.1/swagger.json", "Tasks API");
         con.RoutePrefix = string.Empty;
     });
 }

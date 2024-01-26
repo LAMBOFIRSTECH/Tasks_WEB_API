@@ -10,82 +10,65 @@ namespace Tasks_WEB_API.Controllers;
 [Route("api/[controller]")]
 public class TasksManagementController : ControllerBase
 {
-    private readonly TasksManagementContext _content;
+    private readonly DailyTasksContext _content;
 
     private readonly ILogger<TasksManagementController> _logger;
-    public TasksManagementController(ILogger<TasksManagementController> logger, TasksManagementContext context)
+    public TasksManagementController(ILogger<TasksManagementController> logger, DailyTasksContext context)
     {
         _logger = logger;
         _content = context;
-    }
 
-    // public async Task GetUtilisateur()
-    // {
-
-    // }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns>Liste de tous les utilisateurs </returns>
-    [Route("~/GetUtilisateurs")]
-    [HttpGet]
-    public async Task<IActionResult> Get()
-    {
-
-        List<Utilisateur> maListe = new List<Utilisateur>()
-        {
-            new Utilisateur(){Matricule = "01User1", Nom = "lambo"},
-
-            new Utilisateur(){Matricule = "02User2", Nom = "artur"}
-
-        };
         _content.Database.EnsureCreated();
-
-        foreach (var item in maListe)
+        List<Tache> taches = new List<Tache>()
         {
-
-            _content.Utilisateurs.Add(item);
-            _content.SaveChanges();
+            new Tache(){ID="01a", Titre = "faire un audit digital",Summary="prppprp",Date=DateTime.Now},
+            new Tache(){ID="01b", Titre = "demoulage",Summary="oooooooo",Date=DateTime.Now}
+        };
+        foreach (var item in taches)
+        {
+            _content.Taches.Add(item);
+            _content.SaveChangesAsync();
         }
 
-        var utilisateurs = await _content.Utilisateurs
-            .OrderBy(user => user.Matricule)
-            .ToListAsync();
 
-        if (utilisateurs.Any())
-        {
-            return Ok(utilisateurs);
-        }
-        else
-        {
-            return NotFound("pas de données");
-        }
+        // foreach (var item in utilisateurs)
+        // {
+        //     var searchValue = item;
+        //     bool result = _content.Utilisateurs.Contains(searchValue);
+        //     if (result)
+        //     {
+        //         return NotFound($"L'utilisateur {item.ID} est déjà présent dans le context");
+        //     }
+
+
+        // }
+
     }
 
-
-    // [HttpPost]
-    // public IActionResult AddContains()
-    // {
-    //     var tache = "";
-    //     return tache;
-    // }
-
-    /// <summary>
-    /// On veut supprimer une tache à l'aide de son ID.
-    /// </summary>
-    /// <param name="ID"></param>
-    /// <returns></returns>
-    [HttpDelete("{ID}")]
-    public async Task<IActionResult> Delete(int ID)
+    [Route("~/GetTaskList")]
+    [HttpGet]
+    public async Task<IActionResult> GetTask()
     {
-        var item = await _content.Taches.FindAsync(ID);
-        if (item is null)
+
+        try
         {
-            return NotFound();
+            var taches = await _content.Taches.ToListAsync();
+            if (taches.Any())
+            {
+                return Ok(taches);
+            }
+            else
+            {
+                return NotFound("pas de données");
+            }
+
         }
-        _content.Taches.Remove(item);
-        await _content.SaveChangesAsync();
-        return NoContent();
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                "Error retrieving data from the database");
+        }
     }
+
+    // autre controller
 }

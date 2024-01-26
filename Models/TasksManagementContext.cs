@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 namespace Tasks_WEB_API.Models;
-public class TasksManagementContext : DbContext
+public class DailyTasksContext : DbContext
 {
-    public TasksManagementContext(DbContextOptions<TasksManagementContext> options)
+    public DailyTasksContext(DbContextOptions<DailyTasksContext> options)
         : base(options)
     {
     }
