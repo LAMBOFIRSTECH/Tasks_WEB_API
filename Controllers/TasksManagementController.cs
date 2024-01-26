@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Tasks_WEB_API.Models;
 
@@ -8,26 +10,59 @@ namespace Tasks_WEB_API.Controllers;
 [Route("api/[controller]")]
 public class TasksManagementController : ControllerBase
 {
-
-
-
-    private readonly TasksManagementContext _usercontext;
+    private readonly TasksManagementContext _content;
 
     private readonly ILogger<TasksManagementController> _logger;
-
     public TasksManagementController(ILogger<TasksManagementController> logger, TasksManagementContext context)
     {
         _logger = logger;
-        _usercontext = context;
+        _content = context;
     }
+
+    // public async Task GetUtilisateur()
+    // {
+
+    // }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Liste de tous les utilisateurs </returns>
+    [Route("~/GetUtilisateurs")]
     [HttpGet]
-    public Task<List<Utilisateur>> Get() =>
-    _usercontext.Utilisateurs.OrderBy(u => u.Matricule).ToListAsync();
+    public async Task<IActionResult> Get()
+    {
+
+        List<Utilisateur> maListe = new List<Utilisateur>()
+        {
+            new Utilisateur(){Matricule = "01User1", Nom = "lambo"},
+
+            new Utilisateur(){Matricule = "02User2", Nom = "artur"}
+
+        };
+        _content.Database.EnsureCreated();
+
+        foreach (var item in maListe)
+        {
+
+            _content.Utilisateurs.Add(item);
+            _content.SaveChanges();
+        }
+
+        var utilisateurs = await _content.Utilisateurs
+            .OrderBy(user => user.Matricule)
+            .ToListAsync();
+
+        if (utilisateurs.Any())
+        {
+            return Ok(utilisateurs);
+        }
+        else
+        {
+            return NotFound("pas de données");
+        }
+    }
+
 
     // [HttpPost]
     // public IActionResult AddContains()
@@ -37,23 +72,20 @@ public class TasksManagementController : ControllerBase
     // }
 
     /// <summary>
-    /// On veut supprimer une tache à l'aide de son matricule
+    /// On veut supprimer une tache à l'aide de son ID.
     /// </summary>
-    /// <param name="Matricule"></param>
+    /// <param name="ID"></param>
     /// <returns></returns>
-    [HttpDelete("{Matricule}")]
-    public async Task<IActionResult> Delete(string Matricule)
+    [HttpDelete("{ID}")]
+    public async Task<IActionResult> Delete(int ID)
     {
-        var item = await _usercontext.Taches.FindAsync(Matricule);
-
+        var item = await _content.Taches.FindAsync(ID);
         if (item is null)
         {
             return NotFound();
         }
-
-        _usercontext.Taches.Remove(item);
-        await _usercontext.SaveChangesAsync();
-
+        _content.Taches.Remove(item);
+        await _content.SaveChangesAsync();
         return NoContent();
     }
 }

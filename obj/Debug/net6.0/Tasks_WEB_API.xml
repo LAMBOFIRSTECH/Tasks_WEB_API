@@ -8,13 +8,13 @@
             <summary>
             
             </summary>
-            <returns></returns>
+            <returns>Liste de tous les utilisateurs </returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.Delete(System.String)">
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.Delete(System.Int32)">
             <summary>
-            On veut supprimer une tache à l'aide de son matricule
+            On veut supprimer une tache à l'aide de son ID.
             </summary>
-            <param name="Matricule"></param>
+            <param name="ID"></param>
             <returns></returns>
         </member>
     </members>

@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.OpenApi.Models;
+using Tasks_WEB_API.Models;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,8 +41,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-// builder.Services.AddDbContext<TodoContext>(opt =>
-//     opt.UseInMemoryDatabase("TodoList")); Contexte de base de données
+builder.Services.AddDbContext<TasksManagementContext>(opt =>
+     opt.UseInMemoryDatabase("Utilisateur")); //Contexte de base de données
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
