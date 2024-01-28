@@ -1,13 +1,18 @@
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Tasks_WEB_API.Models;
 
 namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1.0/[controller]")]
 public class UserManagementController : ControllerBase
 {
     private readonly DailyTasksContext _content;
@@ -17,63 +22,64 @@ public class UserManagementController : ControllerBase
     {
         _logger = logger;
         _content = context;
-
+    }
+    /// <summary>
+    /// Cette méthode permet de créer des utilisateurs et les sauvegarder dans le contexte de base de données.
+    /// </summary>
+    /// <returns>listeUtilisateurs</returns>
+    [NonAction]
+    public async Task<List<Utilisateur>> UsersListe()
+    {
         _content.Database.EnsureCreated();
-        List<Utilisateur> maListe = new List<Utilisateur>()
+        try
         {
-            new Utilisateur(){ID = 11, Nom = "lambo"},
+            List<Utilisateur> maListe = new List<Utilisateur>()
+                {
+                    new Utilisateur(){ID = 11, Nom = "lambo"},
 
-            new Utilisateur(){ID = 22, Nom = "artur"}
-
-        };
-
-        foreach (var item in maListe)
-        {
-            _content.Utilisateurs.Add(item);
-            _content.SaveChangesAsync(); //c4est grace à ceci qu'on peut actualisé le swagger pour la liste des users de façon async
+                    new Utilisateur(){ID = 22, Nom = "artur"}
+                };
+            foreach (var item in maListe)
+            {
+                _content.Utilisateurs.Add(item);
+            }
+            await _content.SaveChangesAsync();
         }
-
-        List<Tache> taches = new List<Tache>()
+        catch (Exception)
         {
-            new Tache(){ID="01a", Titre = "faire un audit digital",Summary="prppprp",Date=DateTime.Now},
-            new Tache(){ID="01b", Titre = "demoulage",Summary="oooooooo",Date=DateTime.Now}
-        };
-        foreach (var item in taches)
-        {
-            _content.Taches.Add(item);
-            _content.SaveChangesAsync();
+            Console.WriteLine("Error");
         }
-
+        List<Utilisateur> listeUtilisateurs = await _content.Utilisateurs.ToListAsync();
+        return listeUtilisateurs;
     }
 
     /// <summary>
-    /// 
+    /// Affiche la liste de tous les utilisateurs
     /// </summary>
-    /// <returns>Liste de tous les utilisateurs </returns>
+    /// <returns> </returns>
     [Route("~/GetUsersList")]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-
         try
         {
-            var utilisateurs = await _content.Utilisateurs.ToListAsync();
-            if (utilisateurs.Any())
+            var UsersContextDB = await UsersListe();
+            if (UsersContextDB.Any())
             {
-                return Ok(utilisateurs);
+                return Ok(UsersContextDB);
             }
             else
             {
-                return NotFound("pas de données");
+                return NotFound("Pas de données utilisateurs présent dans le contexte de base de données.");
             }
-
         }
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error retrieving data from the database");
+                "Error : retrieving data from the database context");
         }
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -82,29 +88,46 @@ public class UserManagementController : ControllerBase
     [HttpGet("~/SelectUser/{ID:int}")]
     public async Task<IActionResult> SelectUser(int ID)
     {
-        var item = await _content.Utilisateurs.FindAsync(ID);
-        if (item is null)
+        var DataBaseContext = await UsersListe();
+        foreach (var elt in DataBaseContext)
         {
-            return NotFound();
+            if (elt.ID == ID)
+            {
+                return Ok(elt);
+            }
         }
-        return Ok(item);
+        return NotFound("Utilisateur non trouvé.");
     }
+
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-
-    [HttpPost("~/CreateUser/")]
-    public async Task<IActionResult> AddContains()
+    [HttpPost("~/CreateUser/{identifiant:int}/{nom}")]
+    public async Task<IActionResult> AddContains(int identifiant, string nom)
     {
-        var item = await _content.Utilisateurs.ToListAsync();
-
-        if (item is null)
+        try
         {
-            return NotFound();
+            List<Utilisateur> DataBaseContext = await UsersListe();
+
+            Utilisateur utilisateur = new Utilisateur() { ID = identifiant, Nom = nom };
+            DataBaseContext.Add(utilisateur);
+
+            await _content.SaveChangesAsync();
+            DataBaseContext = await UsersListe();
+            
+            return Ok("La ressource a bien été créée");
         }
-        return Ok();
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred: {ex.Message}");
+        }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     [HttpPut("~/UpdateUser/{ID:int}")]
     public async Task<IActionResult> UpdateContains()
     {
@@ -127,16 +150,20 @@ public class UserManagementController : ControllerBase
 
     public async Task<IActionResult> Delete(int ID)
     {
+
         var item = await _content.Utilisateurs.FindAsync(ID);
         try
         {
-            if (item is null)
+            if (item == null)
             {
-                return NotFound();
+                return NotFound($"L'utilisateur [{ID}] n'existe plus dans le contexte de base de données");
             }
-
             _content.Utilisateurs.Remove(item);
-            await _content.SaveChangesAsync();
+            //await _content.SaveChangesAsync();
+
+            var users = _content.Utilisateurs.ToListAsync();
+            users.Result.Any();
+
             return Ok("La donnée a bien été supprimée");
         }
 
@@ -149,5 +176,4 @@ public class UserManagementController : ControllerBase
     }
 
 
-    // autre controller
 }

@@ -4,11 +4,17 @@
         <name>Tasks_WEB_API</name>
     </assembly>
     <members>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UsersListe">
+            <summary>
+            Cette méthode permet de créer des utilisateurs et les sauvegarder dans le contexte de base de données.
+            </summary>
+            <returns>listeUtilisateurs</returns>
+        </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.Get">
             <summary>
-            
+            Affiche la liste de tous les utilisateurs
             </summary>
-            <returns>Liste de tous les utilisateurs </returns>
+            <returns> </returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.SelectUser(System.Int32)">
             <summary>
@@ -17,7 +23,13 @@
             <param name="ID"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.AddContains">
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.AddContains(System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateContains">
             <summary>
             
             </summary>

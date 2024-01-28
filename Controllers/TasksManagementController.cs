@@ -19,16 +19,6 @@ public class TasksManagementController : ControllerBase
         _content = context;
 
         _content.Database.EnsureCreated();
-        List<Tache> taches = new List<Tache>()
-        {
-            new Tache(){ID="01a", Titre = "faire un audit digital",Summary="prppprp",Date=DateTime.Now},
-            new Tache(){ID="01b", Titre = "demoulage",Summary="oooooooo",Date=DateTime.Now}
-        };
-        foreach (var item in taches)
-        {
-            _content.Taches.Add(item);
-            _content.SaveChangesAsync();
-        }
 
 
         // foreach (var item in utilisateurs)
@@ -44,6 +34,31 @@ public class TasksManagementController : ControllerBase
         // }
 
     }
+    [NonAction]
+    public async Task<List<Tache>> ListeTaches() 
+    {
+        _content.Database.EnsureCreated();
+        List<Tache> taches = new List<Tache>()
+        {
+            new Tache(){ID="01a", Titre = "faire un audit digital",Summary="prppprp",Date=DateTime.Now},
+            new Tache(){ID="01b", Titre = "demoulage",Summary="oooooooo",Date=DateTime.Now}
+        };
+        foreach (var item in taches)
+        {
+            _content.Taches.Add(item);
+
+        }
+
+        await _content.SaveChangesAsync();
+
+
+        List<Tache> listeTaches = await _content.Taches.ToListAsync();
+
+        return listeTaches;
+
+
+    }
+
 
     [Route("~/GetTaskList")]
     [HttpGet]

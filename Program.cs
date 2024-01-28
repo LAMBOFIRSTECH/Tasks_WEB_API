@@ -42,7 +42,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DailyTasksContext>(opt =>
-     opt.UseInMemoryDatabase("Utilisateur")); //Contexte de base de données
+     opt.UseInMemoryDatabase("Managed Tasks Database")); //Contexte de base de données
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
