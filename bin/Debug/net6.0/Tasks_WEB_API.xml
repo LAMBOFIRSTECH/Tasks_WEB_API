@@ -4,12 +4,6 @@
         <name>Tasks_WEB_API</name>
     </assembly>
     <members>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UsersListe">
-            <summary>
-            Cette méthode permet de créer des utilisateurs et les sauvegarder dans le contexte de base de données.
-            </summary>
-            <returns>listeUtilisateurs</returns>
-        </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.Get">
             <summary>
             Affiche la liste de tous les utilisateurs
@@ -23,19 +17,19 @@
             <param name="ID"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.AddContains(System.Int32,System.String)">
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.CreateUser(System.Int32,System.String)">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateContains">
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateUser">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.Delete(System.Int32)">
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.DeleteUser(System.Int32)">
             <summary>
             On veut supprimer une tache à l'aide de son Matricule.
             </summary>

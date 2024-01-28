@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.OpenApi.Models;
 using Tasks_WEB_API.Models;
+
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen(con =>
         Contact = new OpenApiContact
         {
             Name = "Artur Lambo",
-            Email= "lamboartur94@gmail.com"
+            Email = "lamboartur94@gmail.com"
         },
         License = new OpenApiLicense
         {
@@ -41,12 +41,18 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DailyTasksContext>(opt =>
-     opt.UseInMemoryDatabase("Managed Tasks Database")); //Contexte de base de données
+
+builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
+
+    opt.UseSqlite("Data Source=:memory:")
+);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -54,7 +60,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(con =>
     {
         con.SwaggerEndpoint("/swagger/1.0/swagger.json", "Daily Tasks Management API");
-        //con.SwaggerEndpoint("/swagger/1.1/swagger.json", "Tasks API");
+
         con.RoutePrefix = string.Empty;
     });
 }

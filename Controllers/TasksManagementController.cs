@@ -10,10 +10,10 @@ namespace Tasks_WEB_API.Controllers;
 [Route("api/[controller]")]
 public class TasksManagementController : ControllerBase
 {
-    private readonly DailyTasksContext _content;
+    private readonly DailyTasksMigrationsContext  _content;
 
     private readonly ILogger<TasksManagementController> _logger;
-    public TasksManagementController(ILogger<TasksManagementController> logger, DailyTasksContext context)
+    public TasksManagementController(ILogger<TasksManagementController> logger, DailyTasksMigrationsContext  context)
     {
         _logger = logger;
         _content = context;
