@@ -100,7 +100,6 @@ public class UserManagementController : ControllerBase
     }
 
     /// <summary>
-    /// On veut supprimer une tache à l'aide de son Matricule.
     /// </summary>
     /// <param name="ID"></param>
     /// <returns></returns>
