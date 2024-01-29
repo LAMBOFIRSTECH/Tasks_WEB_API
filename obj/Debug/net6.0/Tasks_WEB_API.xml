@@ -23,17 +23,17 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateUser">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.DeleteUser(System.Int32)">
             <summary>
             On veut supprimer une tache à l'aide de son Matricule.
             </summary>
             <param name="ID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateUser(Tasks_WEB_API.Utilisateur)">
+            <summary>
+            
+            </summary>
             <returns></returns>
         </member>
     </members>

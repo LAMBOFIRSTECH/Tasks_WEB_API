@@ -8,21 +8,20 @@ namespace Tasks_WEB_API.Controllers;
 [Route("api/v1.0/[controller]")]
 public class UserManagementController : ControllerBase
 {
-    private readonly DailyTasksMigrationsContext  _content;
+    private readonly DailyTasksMigrationsContext _content;
 
     private readonly ILogger<UserManagementController> _logger;
-    public UserManagementController(ILogger<UserManagementController> logger, DailyTasksMigrationsContext  context)
+    public UserManagementController(ILogger<UserManagementController> logger, DailyTasksMigrationsContext context)
     {
         _logger = logger;
         _content = context;
-        
+
     }
 
     /// <summary>
     /// Affiche la liste de tous les utilisateurs
     /// </summary>
     /// <returns> </returns>
-    
     [Route("~/GetUsersList")]
     [HttpGet]
     public async Task<IActionResult> Get()
@@ -81,13 +80,13 @@ public class UserManagementController : ControllerBase
         try
         {
             var DataBaseContext = await _content.Utilisateurs.ToListAsync();
-            
+
             if (DataBaseContext.Any(u => u.ID == identifiant))
             {
                 return Conflict("Cet utilisateur est déjà présent.");
             }
             Utilisateur utilisateur = new Utilisateur() { ID = identifiant, Nom = nom };
-            
+
             // Enregistrement du nouvel utilisateur dans le contexte de base de données.
             await _content.Utilisateurs.AddAsync(utilisateur);
             await _content.SaveChangesAsync();
@@ -103,23 +102,6 @@ public class UserManagementController : ControllerBase
     }
 
     /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    [HttpPut("~/UpdateUser/{ID:int}")]
-    public async Task<IActionResult> UpdateUser()
-    {
-
-        var item = await _content.Utilisateurs.ToListAsync();
-
-        if (item is null)
-        {
-            return NotFound();
-        }
-        return Ok();
-    }
-
-    /// <summary>
     /// On veut supprimer une tache à l'aide de son Matricule.
     /// </summary>
     /// <param name="ID"></param>
@@ -129,15 +111,15 @@ public class UserManagementController : ControllerBase
     public async Task<IActionResult> DeleteUser(int ID)
     {
 
-        var item = await _content.Utilisateurs.FindAsync(ID);
+        var utilisateur = await _content.Utilisateurs.FindAsync(ID);
         try
         {
-            if (item == null)
+            if (utilisateur == null)
             {
                 return NotFound($"L'utilisateur [{ID}] n'existe plus dans le contexte de base de données");
             }
-            _content.Utilisateurs.Remove(item);
-            //await _content.SaveChangesAsync();
+            _content.Utilisateurs.Remove(utilisateur);
+            await _content.SaveChangesAsync();
 
             var users = _content.Utilisateurs.ToListAsync();
             users.Result.Any();
@@ -153,5 +135,26 @@ public class UserManagementController : ControllerBase
 
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    [HttpPut("~/UpdateUser")]
+    public async Task<IActionResult> UpdateUser([FromBody] Utilisateur utilisateur)
+    {
 
+        var item = await _content.Utilisateurs.FindAsync(utilisateur.ID);
+
+        if (item is null)
+        {
+            return NotFound($"Cet utilisateur n'existe plus dans le contexte de base de données");
+        }
+        if (item.ID == utilisateur.ID)
+        {
+            item.Nom = utilisateur.Nom;
+            await _content.SaveChangesAsync();
+           
+        }
+        return Ok($"Les infos de l'utilisateur [{item.ID}] ont bien été modifiées.");
+    }
 }
