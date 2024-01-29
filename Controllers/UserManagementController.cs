@@ -21,14 +21,11 @@ public class UserManagementController : ControllerBase
     /// <summary>
     /// Affiche la liste de tous les utilisateurs
     /// </summary>
-    /// <returns> </returns>
-    [Route("~/GetUsersList")]
-    [HttpGet]
+    [HttpGet("~/GetUsers")]
     public async Task<IActionResult> Get()
     {
         try
         {
-
             var UsersContextDB = await _content.Utilisateurs.ToListAsync();
             if (UsersContextDB.Any())
             {
@@ -62,17 +59,18 @@ public class UserManagementController : ControllerBase
                 return Ok(utilisateur);
             }
             return NotFound("Utilisateur non trouvé.");
-
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode(500, $"Une erreur s'est produite : {ex.Message}");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Une erreur s'est produite ");
         }
     }
 
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="identifiant"></param>
+    /// <param name="nom"></param>
     /// <returns></returns>
     [HttpPost("~/CreateUser/{identifiant:int}/{nom}")]
     public async Task<IActionResult> CreateUser(int identifiant, string nom)
@@ -95,9 +93,9 @@ public class UserManagementController : ControllerBase
 
             return Ok("La ressource a bien été créée");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode(500, $"An error occurred: {ex.Message}");
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred");
         }
     }
 
@@ -107,10 +105,8 @@ public class UserManagementController : ControllerBase
     /// <param name="ID"></param>
     /// <returns></returns>
     [HttpDelete("~/DeleteUser/{ID:int}")]
-
     public async Task<IActionResult> DeleteUser(int ID)
     {
-
         var utilisateur = await _content.Utilisateurs.FindAsync(ID);
         try
         {
@@ -126,7 +122,6 @@ public class UserManagementController : ControllerBase
 
             return Ok("La donnée a bien été supprimée");
         }
-
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError,
@@ -142,19 +137,26 @@ public class UserManagementController : ControllerBase
     [HttpPut("~/UpdateUser")]
     public async Task<IActionResult> UpdateUser([FromBody] Utilisateur utilisateur)
     {
-
-        var item = await _content.Utilisateurs.FindAsync(utilisateur.ID);
-
-        if (item is null)
+        try
         {
-            return NotFound($"Cet utilisateur n'existe plus dans le contexte de base de données");
+            var item = await _content.Utilisateurs.FindAsync(utilisateur.ID);
+
+            if (item is null)
+            {
+                return NotFound($"Cet utilisateur n'existe plus dans le contexte de base de données");
+            }
+            if (item.ID == utilisateur.ID)
+            {
+                item.Nom = utilisateur.Nom;
+                await _content.SaveChangesAsync();
+
+            }
+            return Ok($"Les infos de l'utilisateur [{item.ID}] ont bien été modifiées.");
         }
-        if (item.ID == utilisateur.ID)
+        catch (Exception)
         {
-            item.Nom = utilisateur.Nom;
-            await _content.SaveChangesAsync();
-           
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                      "Error deleting data");
         }
-        return Ok($"Les infos de l'utilisateur [{item.ID}] ont bien été modifiées.");
     }
 }

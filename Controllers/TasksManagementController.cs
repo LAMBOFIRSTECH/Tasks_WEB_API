@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -10,80 +12,154 @@ namespace Tasks_WEB_API.Controllers;
 [Route("api/[controller]")]
 public class TasksManagementController : ControllerBase
 {
-    private readonly DailyTasksMigrationsContext  _content;
+    private readonly DailyTasksMigrationsContext _content;
 
     private readonly ILogger<TasksManagementController> _logger;
-    public TasksManagementController(ILogger<TasksManagementController> logger, DailyTasksMigrationsContext  context)
+    public TasksManagementController(ILogger<TasksManagementController> logger, DailyTasksMigrationsContext context)
     {
         _logger = logger;
         _content = context;
 
         _content.Database.EnsureCreated();
 
-
-        // foreach (var item in utilisateurs)
-        // {
-        //     var searchValue = item;
-        //     bool result = _content.Utilisateurs.Contains(searchValue);
-        //     if (result)
-        //     {
-        //         return NotFound($"L'utilisateur {item.ID} est déjà présent dans le context");
-        //     }
-
-
-        // }
-
     }
-    [NonAction]
-    public async Task<List<Tache>> ListeTaches() 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("~/GetTasks")]
+    public async Task<IActionResult> Get()
     {
-        _content.Database.EnsureCreated();
-        List<Tache> taches = new List<Tache>()
-        {
-            new Tache(){ID="01a", Titre = "faire un audit digital",Summary="prppprp",Date=DateTime.Now},
-            new Tache(){ID="01b", Titre = "demoulage",Summary="oooooooo",Date=DateTime.Now}
-        };
-        foreach (var item in taches)
-        {
-            _content.Taches.Add(item);
-
-        }
-
-        await _content.SaveChangesAsync();
-
-
-        List<Tache> listeTaches = await _content.Taches.ToListAsync();
-
-        return listeTaches;
-
-
-    }
-
-
-    [Route("~/GetTaskList")]
-    [HttpGet]
-    public async Task<IActionResult> GetTask()
-    {
-
         try
         {
-            var taches = await _content.Taches.ToListAsync();
-            if (taches.Any())
+            var TasksContextDB = await _content.Taches.ToListAsync();
+            if (TasksContextDB.Any())
             {
-                return Ok(taches);
+                return Ok(TasksContextDB);
             }
             else
             {
-                return NotFound("pas de données");
+                return NotFound("Pas de données tache présentent dans le contexte de base de données.");
             }
-
         }
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error retrieving data from the database");
+                "Erreur : lors de la collecte de donnée dans le contexte de base de donnée.");
         }
     }
 
-    // autre controller
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Matricule"></param>
+    /// <returns></returns>
+    [HttpGet("~/SelectTask/{Matricule:int}")]
+    public async Task<IActionResult> SelectUser(int Matricule)
+    {
+        try
+        {
+            var tache = await _content.Taches.FindAsync(Matricule);
+            if (tache != null)
+            {
+                return Ok(tache);
+            }
+            return NotFound("Tache non trouvé.");
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Une erreur s'est produite ");
+        }
+    }
+
+    [HttpPost("~/CreateTask")]
+    public async Task<IActionResult> CreateTask([FromBody] Tache tache)
+    {
+        try
+        {
+            var DataBaseContext = await _content.Taches.ToListAsync();
+
+            if (DataBaseContext.Any(t => t.Matricule == tache.Matricule))
+            {
+                return Conflict("Cette tache est déjà présente.");
+            }
+            Tache task = new Tache() { Matricule = tache.Matricule, Titre = tache.Titre, Summary = tache.Summary, DateH = tache.DateH };
+
+            // Enregistrement du nouvel utilisateur dans le contexte de base de données.
+            await _content.Taches.AddAsync(task);
+            await _content.SaveChangesAsync();
+            // Obtention de la liste mise à jour des utilisateurs après la création
+            var TasksContextDB = await _content.Taches.ToListAsync();
+
+            return Ok("La ressource a bien été créée");
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred");
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Matricule"></param>
+    /// <returns></returns>
+    [HttpDelete("~/DeleteTask/{Matricule:int}")]
+    public async Task<IActionResult> DeleteUser(int Matricule)
+    {
+        var tache = await _content.Taches.FindAsync(Matricule);
+        try
+        {
+            if (tache == null)
+            {
+                return NotFound($"La tache de matricule : [{Matricule}] n'existe plus dans le contexte de base de données");
+            }
+            _content.Taches.Remove(tache);
+            await _content.SaveChangesAsync();
+
+            var taches = _content.Taches.ToListAsync();
+            taches.Result.Any();
+
+            return Ok("La donnée a bien été supprimée");
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                      "Error deleting data");
+        }
+
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tache"></param>
+    /// <returns></returns>
+    [HttpPut("~/UpdateTask")]
+    public async Task<IActionResult> UpdateTask([FromBody] Tache tache)
+    {
+        try
+        {
+            var item = await _content.Taches.FindAsync(tache.Matricule);
+
+            if (item is null)
+            {
+                return NotFound($"Cet utilisateur n'existe plus dans le contexte de base de données");
+            }
+            if (item.Matricule == tache.Matricule)
+            {
+                item.Titre = tache.Titre;
+                item.Summary = tache.Summary;
+                item.DateH = tache.DateH;
+                await _content.SaveChangesAsync();
+
+            }
+            return Ok($"Les infos de la tache [{item.Matricule}] ont bien été modifiées.");
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                      "Error deleting data");
+        }
+    }
+
 }

@@ -4,11 +4,37 @@
         <name>Tasks_WEB_API</name>
     </assembly>
     <members>
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.Get">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.SelectUser(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Matricule"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.DeleteUser(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Matricule"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.UpdateTask(Tasks_WEB_API.Tache)">
+            <summary>
+            
+            </summary>
+            <param name="tache"></param>
+            <returns></returns>
+        </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.Get">
             <summary>
             Affiche la liste de tous les utilisateurs
             </summary>
-            <returns> </returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.SelectUser(System.Int32)">
             <summary>
@@ -21,6 +47,8 @@
             <summary>
             
             </summary>
+            <param name="identifiant"></param>
+            <param name="nom"></param>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.DeleteUser(System.Int32)">
@@ -35,6 +63,26 @@
             
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Tasks_WEB_API.Tache">
+            <summary>
+            Représente une tache dans le système
+            </summary>
+        </member>
+        <member name="P:Tasks_WEB_API.Tache.Matricule">
+            <summary>
+            Représente l'identifiant unique d'une tache.
+            </summary>
+        </member>
+        <member name="T:Tasks_WEB_API.Utilisateur">
+            <summary>
+            Représente un utilisateur dans le système
+            </summary>
+        </member>
+        <member name="P:Tasks_WEB_API.Utilisateur.ID">
+            <summary>
+            Représente l'identifiant unique d'un utilisateur.
+            </summary>
         </member>
     </members>
 </doc>

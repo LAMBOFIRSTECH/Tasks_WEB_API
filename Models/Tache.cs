@@ -1,14 +1,21 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Tasks_WEB_API;
+/// <summary>
+/// Représente une tache dans le système
+/// </summary>
 public class Tache
 {
-    public string? ID { get; set; }
+    /// <summary>
+    /// Représente l'identifiant unique d'une tache.
+    /// </summary>
+    [Key]
+    public int? Matricule { get; set; }
     public string? Titre { get; set; }
 
     public string? Summary { get; set; }
-    // public List<Tache>? Taches { get; set; }
+
     [Required]
     [DataType(DataType.Date)]
-    public DateTime Date { get; set; }
+    public DateTime DateH { get; set; }
 }
