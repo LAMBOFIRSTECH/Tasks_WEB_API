@@ -15,12 +15,14 @@ public class UserManagementController : ControllerBase
     {
         _logger = logger;
         _content = context;
+        
     }
 
     /// <summary>
     /// Affiche la liste de tous les utilisateurs
     /// </summary>
     /// <returns> </returns>
+    
     [Route("~/GetUsersList")]
     [HttpGet]
     public async Task<IActionResult> Get()
@@ -76,28 +78,26 @@ public class UserManagementController : ControllerBase
     [HttpPost("~/CreateUser/{identifiant:int}/{nom}")]
     public async Task<IActionResult> CreateUser(int identifiant, string nom)
     {
-        using var transaction = await _content.Database.BeginTransactionAsync();
         try
         {
-          //_content.Database.EnsureCreated(); 
-            List<Utilisateur> DataBaseContext = await _content.Utilisateurs.ToListAsync();
+            var DataBaseContext = await _content.Utilisateurs.ToListAsync();
+            
             if (DataBaseContext.Any(u => u.ID == identifiant))
             {
                 return Conflict("Cet utilisateur est déjà présent.");
             }
-
             Utilisateur utilisateur = new Utilisateur() { ID = identifiant, Nom = nom };
-            DataBaseContext.Add(utilisateur);
-
+            
+            // Enregistrement du nouvel utilisateur dans le contexte de base de données.
+            await _content.Utilisateurs.AddAsync(utilisateur);
             await _content.SaveChangesAsync();
-            //Validation de la transaction 
-            await transaction.CommitAsync();
+            // Obtention de la liste mise à jour des utilisateurs après la création
+            var UsersContextDB = await _content.Utilisateurs.ToListAsync();
+
             return Ok("La ressource a bien été créée");
         }
         catch (Exception ex)
         {
-            // En cas d'erreur de transaction
-            await transaction.RollbackAsync();
             return StatusCode(500, $"An error occurred: {ex.Message}");
         }
     }

@@ -5,6 +5,6 @@ public class Utilisateur
     [Key]
     public int ID { get; set; }
     [Required]
-    public string Nom { get; set; }
+    public string? Nom { get; set; }
     //public Utilisateur() { }
 }

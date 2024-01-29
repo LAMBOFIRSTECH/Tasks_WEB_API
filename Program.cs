@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Connections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Tasks_WEB_API.Models;
@@ -42,10 +43,19 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
+// Configuration de la chaine de connection à la bd en mémoire dépuis le fichier appset.json
+//   C'est dans ce fichier que l'on passe le nom de la bd en mémoire.
 
-    opt.UseSqlite("Data Source=:memory:")
-);
+builder.Configuration.AddJsonFile("appsettings.json");
+builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
+{
+    string conStrings = builder.Configuration.GetConnectionString("DefaultConnection");
+
+    opt.UseInMemoryDatabase(conStrings);
+});
+
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

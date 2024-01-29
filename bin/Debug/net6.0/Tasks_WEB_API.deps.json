@@ -8,9 +8,9 @@
     ".NETCoreApp,Version=v6.0": {
       "Tasks_WEB_API/1.0.0": {
         "dependencies": {
-          "Microsoft.EntityFrameworkCore.Design": "5.0.10",
           "Microsoft.EntityFrameworkCore.InMemory": "5.0.10",
           "Microsoft.EntityFrameworkCore.Sqlite": "5.0.10",
+          "Microsoft.EntityFrameworkCore.Tools": "5.0.10",
           "Swashbuckle.AspNetCore": "6.5.0"
         },
         "runtime": {
@@ -126,6 +126,11 @@
             "assemblyVersion": "5.0.10.0",
             "fileVersion": "5.0.1021.41011"
           }
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Tools/5.0.10": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Design": "5.0.10"
         }
       },
       "Microsoft.Extensions.ApiDescription.Server/6.0.5": {},
@@ -427,6 +432,13 @@
       "sha512": "sha512-LerzBEn8jxXoCeZx/mJ+7pzsYIeRINDYmsYSv05fl9jOw5nd8fEDk88U0CY+H40KTOTOxc0tCmFV6gOGNR0ckA==",
       "path": "microsoft.entityframeworkcore.sqlite.core/5.0.10",
       "hashPath": "microsoft.entityframeworkcore.sqlite.core.5.0.10.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Tools/5.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tZyRQ01KmPIGXO/jGGG9OrxKvFUckgq65FvGmYjwDazgBXIvfX2kdxXp2nN5gIQOiSMPMpRu8RDqI+2InyBuMg==",
+      "path": "microsoft.entityframeworkcore.tools/5.0.10",
+      "hashPath": "microsoft.entityframeworkcore.tools.5.0.10.nupkg.sha512"
     },
     "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
       "type": "package",

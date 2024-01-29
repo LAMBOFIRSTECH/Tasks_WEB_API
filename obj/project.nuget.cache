@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uUeT8XeRntJwnLLuBxMsdXV4dnJ4kgd6NRlI1BSWSsxej1my5fqOZ18x6bnW1fYJdvC1kPl68lTJkrsEEZgKMw==",
+  "dgSpecHash": "2wa1Cyjg+F82j3A9VC2q986lga6xJqiP4OOMJvy+jZhew3cynV4G0YVbCV31MG33Z5ZFAZ3sQ/idxDgDad0CXg==",
   "success": true,
   "projectFilePath": "/home/lambo-ubuntu/Tasks_WEB_API/Tasks_WEB_API.csproj",
   "expectedPackageFiles": [
@@ -16,6 +16,7 @@
     "/home/lambo-ubuntu/.nuget/packages/microsoft.entityframeworkcore.relational/5.0.10/microsoft.entityframeworkcore.relational.5.0.10.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.entityframeworkcore.sqlite/5.0.10/microsoft.entityframeworkcore.sqlite.5.0.10.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.entityframeworkcore.sqlite.core/5.0.10/microsoft.entityframeworkcore.sqlite.core.5.0.10.nupkg.sha512",
+    "/home/lambo-ubuntu/.nuget/packages/microsoft.entityframeworkcore.tools/5.0.10/microsoft.entityframeworkcore.tools.5.0.10.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.extensions.caching.abstractions/5.0.0/microsoft.extensions.caching.abstractions.5.0.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.extensions.caching.memory/5.0.0/microsoft.extensions.caching.memory.5.0.0.nupkg.sha512",

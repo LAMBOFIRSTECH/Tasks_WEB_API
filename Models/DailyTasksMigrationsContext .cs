@@ -8,7 +8,8 @@ public class DailyTasksMigrationsContext  : DbContext
     }
    
 
-    public DbSet<Utilisateur> Utilisateurs { get; set; } = null!;
+    public DbSet<Utilisateur> Utilisateurs { get; set; }= null!;
     public DbSet<Tache> Taches { get; set; } = null!;
 }
+
 
