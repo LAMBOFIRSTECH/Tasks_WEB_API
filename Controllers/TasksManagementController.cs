@@ -1,15 +1,11 @@
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Tasks_WEB_API.Models;
-
 namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+//[Area("TasksDocumentation")]
+[Route("api/v1.0/[Controller]")]
 public class TasksManagementController : ControllerBase
 {
     private readonly DailyTasksMigrationsContext _content;
@@ -20,11 +16,10 @@ public class TasksManagementController : ControllerBase
         _logger = logger;
         _content = context;
 
-        _content.Database.EnsureCreated();
-
     }
+
     /// <summary>
-    /// 
+    /// Affiche la liste de toutes les taches
     /// </summary>
     /// <returns></returns>
     [HttpGet("~/GetTasks")]
@@ -39,7 +34,7 @@ public class TasksManagementController : ControllerBase
             }
             else
             {
-                return NotFound("Pas de données tache présentent dans le contexte de base de données.");
+                return NotFound("Pas de données présentent  pour la table [tache] dans le contexte de base de données.");
             }
         }
         catch (Exception)
@@ -50,7 +45,7 @@ public class TasksManagementController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    /// Affiche les informations sur une tache précise
     /// </summary>
     /// <param name="Matricule"></param>
     /// <returns></returns>
@@ -72,6 +67,11 @@ public class TasksManagementController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Crée une tache 
+    /// </summary>
+    /// <param name="tache"></param>
+    /// <returns></returns>
     [HttpPost("~/CreateTask")]
     public async Task<IActionResult> CreateTask([FromBody] Tache tache)
     {
@@ -83,7 +83,18 @@ public class TasksManagementController : ControllerBase
             {
                 return Conflict("Cette tache est déjà présente.");
             }
-            Tache task = new Tache() { Matricule = tache.Matricule, Titre = tache.Titre, Summary = tache.Summary, DateH = tache.DateH };
+            Tache task = new Tache()
+            {
+                Matricule = tache.Matricule,
+                Titre = tache.Titre,
+                Summary = tache.Summary, 
+                TasksDate= new Tache.DateH()
+                {
+                    
+                    StartDateH = tache.TasksDate.StartDateH,
+                    EndDateH = tache.TasksDate.EndDateH
+                }
+            };
 
             // Enregistrement du nouvel utilisateur dans le contexte de base de données.
             await _content.Taches.AddAsync(task);
@@ -100,7 +111,7 @@ public class TasksManagementController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    /// Supprime une tache
     /// </summary>
     /// <param name="Matricule"></param>
     /// <returns></returns>
@@ -127,10 +138,10 @@ public class TasksManagementController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError,
                       "Error deleting data");
         }
-
     }
+
     /// <summary>
-    /// 
+    /// Met à jour les informations d'une tache
     /// </summary>
     /// <param name="tache"></param>
     /// <returns></returns>
@@ -149,7 +160,7 @@ public class TasksManagementController : ControllerBase
             {
                 item.Titre = tache.Titre;
                 item.Summary = tache.Summary;
-                item.DateH = tache.DateH;
+                item.TasksDate = new Tache.DateH() { StartDateH = tache.TasksDate.StartDateH, EndDateH = tache.TasksDate.EndDateH };
                 await _content.SaveChangesAsync();
 
             }
@@ -161,5 +172,4 @@ public class TasksManagementController : ControllerBase
                       "Error deleting data");
         }
     }
-
 }

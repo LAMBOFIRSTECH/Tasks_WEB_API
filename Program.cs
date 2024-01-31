@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Tasks_WEB_API.Models;
@@ -41,11 +42,6 @@ builder.Services.AddCors(options =>
                       });
 });
 
-builder.Services.AddControllers();
-
-// Configuration de la chaine de connection à la bd en mémoire dépuis le fichier appset.json
-//   C'est dans ce fichier que l'on passe le nom de la bd en mémoire.
-
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
 {
@@ -53,8 +49,6 @@ builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
 
     opt.UseInMemoryDatabase(conStrings);
 });
-
-
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -74,11 +68,15 @@ if (app.Environment.IsDevelopment())
         con.RoutePrefix = string.Empty;
     });
 }
-//app.UseHttpsRedirection();
-app.UseCors(MyAllowSpecificOrigins);
 
+app.UseCors(MyAllowSpecificOrigins);
+var rewriteOptions = new RewriteOptions()
+    .AddRewrite(  @"^www\.taskmoniroting/Taskmanagement",   "https://localhost:7082/index.html",true);
+      
+
+app.UseRewriter(rewriteOptions);
 app.UseAuthorization();
 
-app.MapControllers();
-
+app.MapControllers(); 
+app.UseRouting();
 app.Run();

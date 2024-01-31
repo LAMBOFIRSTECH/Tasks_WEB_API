@@ -5,7 +5,9 @@ using Tasks_WEB_API.Models;
 namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
-[Route("api/v1.0/[controller]")]
+[Area("TasksDocumentation")]
+[Route("api/v1.0/[area]")]
+
 public class UserManagementController : ControllerBase
 {
     private readonly DailyTasksMigrationsContext _content;
@@ -44,7 +46,7 @@ public class UserManagementController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    /// Affiche les informations sur un utilisateur
     /// </summary>
     /// <param name="ID"></param>
     /// <returns></returns>
@@ -67,7 +69,7 @@ public class UserManagementController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    /// Créée un utilisateur
     /// </summary>
     /// <param name="identifiant"></param>
     /// <param name="nom"></param>
@@ -100,6 +102,7 @@ public class UserManagementController : ControllerBase
     }
 
     /// <summary>
+    /// Supprime un utilisateur
     /// </summary>
     /// <param name="ID"></param>
     /// <returns></returns>
@@ -130,7 +133,7 @@ public class UserManagementController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    /// Met à jour les informations d'un utilisateur
     /// </summary>
     /// <returns></returns>
     [HttpPut("~/UpdateUser")]

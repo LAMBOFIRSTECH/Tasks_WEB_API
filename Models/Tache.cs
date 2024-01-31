@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Tasks_WEB_API;
 /// <summary>
@@ -17,5 +19,10 @@ public class Tache
 
     [Required]
     [DataType(DataType.Date)]
-    public DateTime DateH { get; set; }
+    public DateH TasksDate { get; set; }
+    public class DateH
+    {
+        public DateTime StartDateH { get; set; }
+        public DateTime EndDateH { get; set; }
+    }
 }

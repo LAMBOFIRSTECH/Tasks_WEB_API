@@ -6,27 +6,34 @@
     <members>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.Get">
             <summary>
-            
+            Affiche la liste de toutes les taches
             </summary>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.SelectUser(System.Int32)">
             <summary>
-            
+            Affiche les informations sur une tache précise
             </summary>
             <param name="Matricule"></param>
             <returns></returns>
         </member>
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.CreateTask(Tasks_WEB_API.Tache)">
+            <summary>
+            Crée une tache 
+            </summary>
+            <param name="tache"></param>
+            <returns></returns>
+        </member>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.DeleteUser(System.Int32)">
             <summary>
-            
+            Supprime une tache
             </summary>
             <param name="Matricule"></param>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.UpdateTask(Tasks_WEB_API.Tache)">
             <summary>
-            
+            Met à jour les informations d'une tache
             </summary>
             <param name="tache"></param>
             <returns></returns>
@@ -38,14 +45,14 @@
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.SelectUser(System.Int32)">
             <summary>
-            
+            Affiche les informations sur un utilisateur
             </summary>
             <param name="ID"></param>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.CreateUser(System.Int32,System.String)">
             <summary>
-            
+            Créée un utilisateur
             </summary>
             <param name="identifiant"></param>
             <param name="nom"></param>
@@ -53,13 +60,14 @@
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.DeleteUser(System.Int32)">
             <summary>
+            Supprime un utilisateur
             </summary>
             <param name="ID"></param>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateUser(Tasks_WEB_API.Utilisateur)">
             <summary>
-            
+            Met à jour les informations d'un utilisateur
             </summary>
             <returns></returns>
         </member>
