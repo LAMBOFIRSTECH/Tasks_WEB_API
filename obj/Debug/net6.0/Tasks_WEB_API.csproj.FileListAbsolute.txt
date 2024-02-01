@@ -54,8 +54,6 @@
 /home/lambo-ubuntu/Tasks_WEB_API/obj/Debug/net6.0/Tasks_WEB_API.pdb
 /home/lambo-ubuntu/Tasks_WEB_API/obj/Debug/net6.0/Tasks_WEB_API.genruntimeconfig.cache
 /home/lambo-ubuntu/Tasks_WEB_API/obj/Debug/net6.0/ref/Tasks_WEB_API.dll
-/home/lambo-ubuntu/Tasks_WEB_API/bin/Debug/net6.0/Tasks_WEB_API_Tests/obj/project.assets.json
-/home/lambo-ubuntu/Tasks_WEB_API/bin/Debug/net6.0/Tasks_WEB_API_Tests/obj/Tasks_WEB_API_Tests.csproj.nuget.dgspec.json
 /home/lambo-ubuntu/Tasks_WEB_API/bin/Debug/net6.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll
 /home/lambo-ubuntu/Tasks_WEB_API/bin/Debug/net6.0/xunit.runner.reporters.netcoreapp10.dll
 /home/lambo-ubuntu/Tasks_WEB_API/bin/Debug/net6.0/xunit.runner.utility.netcoreapp10.dll
