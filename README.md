@@ -37,3 +37,6 @@ Mettre en place une API permettant d'exposer des dataset provenant d'une BD.
 - [X] Créer un modèle de données et les controleurs requis
 - [ ] Utiliser SQLlite pour générer un modèle de base de données hébergés dans docker
 
+## Representation
+![](task_manager_api.png)
+
