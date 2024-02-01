@@ -20,6 +20,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Étape pour exécuter les tests (remplacez cette section par votre propre logique de test)
+                // Lancer le dotnet test sur l'application.
                 echo "C'est l'étape de test ici"
             }
         }
@@ -28,7 +29,7 @@ pipeline {
             steps {
                 // Étape pour déployer l'application (remplacez cette section par votre propre logique de déploiement)
                 echo "C'est l'étape de déploiement ici"
-              
+
             }
         }
     }
@@ -39,13 +40,13 @@ pipeline {
             echo 'Le pipeline s\'est exécuté avec succès!'
             sh 'rm -f Jenkinsfile'
 
-            // Ajoutez ici des actions supplémentaires à effectuer en cas de succès
+        // Ajoutez ici des actions supplémentaires à effectuer en cas de succès
         }
 
         failure {
             echo 'Le pipeline a échoué!'
 
-            // Ajoutez ici des actions supplémentaires à effectuer en cas d'échec
+        // Ajoutez ici des actions supplémentaires à effectuer en cas d'échec
         }
     }
 }
