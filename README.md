@@ -4,6 +4,7 @@ Mettre en place une API permettant d'exposer des dataset provenant d'une BD.
 ## Mettre en place un swagger, le décrire et
 
 ## Les prerequis
+### Soit via le prompt bash soit via NPM pour l'ajout des packages
 - `dotnet new webapi -o Tasks_WEB-API`
 - `dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 5.0.10`
 - `dotnet add package Microsoft.EntityFrameworkCore.Sqlite --version=5.0.10`
