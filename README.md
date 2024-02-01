@@ -1,7 +1,7 @@
 # Tasks_WEB-API
 Mettre en place une API permettant d'exposer des dataset provenant d'une BD.
 ------------------------------------------------------------------------------------------------------------
-## Mettre en place un swagger, le décrire et appliquer des tests de charge, unitaires 
+## Mettre en place un swagger, le décrire et
 
 ## Les prerequis
 - `dotnet new webapi -o Tasks_WEB-API`
@@ -35,7 +35,7 @@ Mettre en place une API permettant d'exposer des dataset provenant d'une BD.
 ## Créer une base de données 
 - [X] Créer un contexte de base de données en mémoire pour faire des tests sur l'api
 - [X] Créer un modèle de données et les controleurs requis
-- [ ] Utiliser SQLlite pour générer un modèle de base de données hébergés dans docker
+- [ ] Utiliser SQLlite pour générer une base de données hébergée dans docker
 
 ## Representation
 ![](task_manager_api.png)
