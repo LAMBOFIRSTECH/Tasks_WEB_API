@@ -14,19 +14,19 @@ Mettre en place une API permettant d'exposer des dataset provenant d'une BD.
 ## Tests 
 
 - [ ] Tests unitaires
-    > [ ] Test de retour d'actions
-    > [ ] Test d'accès aux differents endpoints
-    > [ ] Test sur la logique du code
+    > - [ ] Test de retour d'actions
+    > - [ ] Test d'accès aux differents endpoints
+    > - [ ] Test sur la logique du code
 
 - [ ] Tests d'api
-    > [ ] Test des verbs HTTP 
+    > - [ ] Test des verbs HTTP 
 
 - [ ] Tests de charge
-    > [ ] Test de performance quant à la montée en charge sur l'api
+    > - [ ] Test de performance quant à la montée en charge sur l'api
 
 - [ ] Tests de Sécurité
-    > [ ] Test d'injection SQL
-    > [ ] Test d'attaques XSS
+    > - [ ] Test d'injection SQL
+    > - [ ] Test d'attaques XSS
 
 ## Sécuriser l'api
 - [ ] Mettre en place les authorisations (de base et/ou via un token de connexion)
