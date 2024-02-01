@@ -30,8 +30,8 @@ Mettre en place une API permettant d'exposer des dataset provenant d'une BD.
 
 ## Sécuriser l'api
 - [ ] Mettre en place les authorisations (de base et/ou via un token de connexion)
-    - + Pour l'utilisateur Admin il faut une autorisation de base
-    - + POur les autres il faut générer un token
+  + Pour l'utilisateur Admin il faut une autorisation de base
+  + POur les autres il faut générer un token
 - [ ] Sécuriser les endpoints
 
 ## Créer une base de données 
