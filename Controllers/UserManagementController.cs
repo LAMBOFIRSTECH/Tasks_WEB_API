@@ -75,7 +75,7 @@ public class UserManagementController : ControllerBase
     /// <param name="nom"></param>
     /// <returns></returns>
     [HttpPost("~/CreateUser/{identifiant:int}/{nom}")]
-    public async Task<IActionResult> CreateUser(int identifiant, string nom)
+    public async Task<IActionResult> CreateUser(int identifiant, string nom, string mdp, string role)
     {
         try
         {
@@ -84,8 +84,14 @@ public class UserManagementController : ControllerBase
             if (DataBaseContext.Any(u => u.ID == identifiant))
             {
                 return Conflict("Cet utilisateur est déjà présent.");
+
             }
-            Utilisateur utilisateur = new Utilisateur() { ID = identifiant, Nom = nom };
+            Utilisateur.Privilege privilege;
+            if (!Enum.TryParse(role, true, out privilege))
+            {
+                return BadRequest("Le rôle spécifié n'est pas valide.");
+            }
+            Utilisateur utilisateur = new Utilisateur() { ID = identifiant, Nom = nom, Pass = mdp, Role = privilege };
 
             // Enregistrement du nouvel utilisateur dans le contexte de base de données.
             await _content.Utilisateurs.AddAsync(utilisateur);
