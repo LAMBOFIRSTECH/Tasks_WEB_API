@@ -12,10 +12,10 @@ public class UserManagementController : ControllerBase
 {
     private readonly DailyTasksMigrationsContext _content;
 
-    private readonly ILogger<UserManagementController> _logger;
-    public UserManagementController(ILogger<UserManagementController> logger, DailyTasksMigrationsContext context)
+    //private readonly ILogger<UserManagementController> _logger;
+    public UserManagementController( DailyTasksMigrationsContext context)
     {
-        _logger = logger;
+        // _logger = logger; ILogger<UserManagementController> logger,
         _content = context;
 
     }
@@ -54,7 +54,7 @@ public class UserManagementController : ControllerBase
     [HttpGet("~/SelectUser/{ID:int}")]
     public async Task<IActionResult> SelectUser(int ID)
     {
-         _logger.LogInformation("Requête GET reçue avec l'ID : {Id}", ID);
+         //_logger.LogInformation("Requête GET reçue avec l'ID : {Id}", ID);
         try
         {
             var utilisateur = await _content.Utilisateurs.FindAsync(ID);
