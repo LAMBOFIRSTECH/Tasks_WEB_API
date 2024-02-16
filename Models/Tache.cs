@@ -17,15 +17,12 @@ public class Tache
 
     public string? Summary { get; set; }
 
-    [Required]
+    [Required(ErrorMessage="Le format de date doit etre comme l'exemple suivant : 01/01/2024")]
     [DataType(DataType.Date)]
     public DateH TasksDate { get; set; }
-    public class DateH
+    public struct DateH
     {
         public DateTime StartDateH { get; set; }
         public DateTime EndDateH { get; set; }
     }
-
-
-    
 }

@@ -26,6 +26,7 @@ public class UserManagementController : ControllerBase
     [HttpGet("~/GetUsers")]
     public async Task<IActionResult> Get()
     {
+       
         try
         {
             var UsersContextDB = await _content.Utilisateurs.ToListAsync();
@@ -53,6 +54,7 @@ public class UserManagementController : ControllerBase
     [HttpGet("~/SelectUser/{ID:int}")]
     public async Task<IActionResult> SelectUser(int ID)
     {
+         _logger.LogInformation("Requête GET reçue avec l'ID : {Id}", ID);
         try
         {
             var utilisateur = await _content.Utilisateurs.FindAsync(ID);
@@ -156,6 +158,8 @@ public class UserManagementController : ControllerBase
             if (item.ID == utilisateur.ID)
             {
                 item.Nom = utilisateur.Nom;
+                item.Pass=utilisateur.Pass;
+                item.Role=utilisateur.Role;
                 await _content.SaveChangesAsync();
 
             }
