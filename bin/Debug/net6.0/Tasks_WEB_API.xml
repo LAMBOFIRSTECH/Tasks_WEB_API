@@ -38,38 +38,10 @@
             <param name="tache"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.Get">
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.GetUsers">
             <summary>
             Affiche la liste de tous les utilisateurs
             </summary>
-        </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.SelectUser(System.Int32)">
-            <summary>
-            Affiche les informations sur un utilisateur
-            </summary>
-            <param name="ID"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.CreateUser(System.Int32,System.String,System.String,System.String)">
-            <summary>
-            Créée un utilisateur
-            </summary>
-            <param name="identifiant"></param>
-            <param name="nom"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.DeleteUser(System.Int32)">
-            <summary>
-            Supprime un utilisateur
-            </summary>
-            <param name="ID"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateUser(Tasks_WEB_API.Utilisateur)">
-            <summary>
-            Met à jour les informations d'un utilisateur
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:Tasks_WEB_API.Tache">
             <summary>

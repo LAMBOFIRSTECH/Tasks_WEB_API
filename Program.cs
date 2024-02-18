@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
+using Tasks_WEB_API.Repositories;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -50,13 +51,11 @@ builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
     opt.UseInMemoryDatabase(conStrings);
 });
 
-
+builder.Services.AddScoped<IUtilisateurRepository,UtilisateurRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-
 
 if (app.Environment.IsDevelopment())
 {
