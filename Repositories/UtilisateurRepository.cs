@@ -22,7 +22,7 @@ namespace Tasks_WEB_API.Repositories
 		public async Task<Utilisateur> GetUserById(int id)
 		{
 			var utilisateur = await _dataBaseMemoryContext.Utilisateur.FirstOrDefaultAsync(u => u.ID == id);
-			return utilisateur; 
+			return utilisateur;
 		}
 
 		public async Task<Utilisateur> CreateUserById(Utilisateur utilisateur)
@@ -32,19 +32,21 @@ namespace Tasks_WEB_API.Repositories
 			return utilisateur;
 		}
 
-		public async Task<Utilisateur> DeleteUserById(int id)
+
+		public async Task<List<Utilisateur>> DeleteUserById(int id)
 		{
 			var listUtilisateur = await _dataBaseMemoryContext.Utilisateur.ToListAsync();
 			var utilisateur = await _dataBaseMemoryContext.Utilisateur.FindAsync(id);
 			listUtilisateur.Remove(utilisateur);
 			await _dataBaseMemoryContext.SaveChangesAsync();
-
-			return utilisateur; 
+			return listUtilisateur;
 		}
+
 
 		public Utilisateur UpdateUser(Utilisateur utilisateur)
 		{
 			throw new NotImplementedException();
 		}
 	}
+
 }

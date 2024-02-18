@@ -43,6 +43,30 @@
             Affiche la liste de tous les utilisateurs
             </summary>
         </member>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.GetUserById(System.Int32)">
+            <summary>
+            Affiche les informations sur un utilisateur
+            </summary>
+            <param name="ID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.CreateUserById(System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Créée un utilisateur
+            </summary>
+            <param name="identifiant"></param>
+            <param name="nom"></param>
+            <param name="mdp"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.DeleteUserById(System.Int32)">
+            <summary>
+            Supprime un utilisateur
+            </summary>
+            <param name="ID"></param>
+            <returns></returns>
+        </member>
         <member name="T:Tasks_WEB_API.Tache">
             <summary>
             Représente une tache dans le système

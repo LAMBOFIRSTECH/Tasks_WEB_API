@@ -52,6 +52,7 @@ builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
 });
 
 builder.Services.AddScoped<IUtilisateurRepository,UtilisateurRepository>();
+builder.Services.AddScoped<ITacheRepository,TacheRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

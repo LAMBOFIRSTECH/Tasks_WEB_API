@@ -8,6 +8,6 @@ namespace Tasks_WEB_API.Interfaces
 {
     public interface ITacheRepository
     {
-        List<Tache> GetTaches() ;
+        List<Tache> GetTaches();
     }
 }
