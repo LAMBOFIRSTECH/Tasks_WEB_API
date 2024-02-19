@@ -7,21 +7,23 @@ namespace Tasks_WEB_API;
 /// </summary>
 public class Utilisateur
 {
-    /// <summary>
-    /// Représente l'identifiant unique d'un utilisateur.
-    /// </summary>
-    [Key]
-    public int ID { get; set; }
-    [Required]
-    public string? Nom { get; set; }
-    public string? Pass { get; set; }
-    public enum Privilege
-    {
-        ADMINISTRATEUR,
-        UTILISATEUR
+	/// <summary>
+	/// Représente l'identifiant unique d'un utilisateur.
+	/// </summary>
+	//[Key]
+	[Required]
+	public int ID { get; set; }
+	[Required]
+	public string? Nom { get; set; }
+	public string? Pass { get; set; }
+	public enum Privilege
+	{
+		ADMINISTRATEUR,
+		UTILISATEUR
 
-    }
-    [EnumDataType(typeof(Privilege))]
-    [Column(TypeName = "nvarchar(24)")]
-    public Privilege Role { get; set; }
+	}
+	[EnumDataType(typeof(Privilege))]
+	[Column(TypeName = "nvarchar(24)")]
+	[Required]
+	public Privilege Role { get; set; }
 }

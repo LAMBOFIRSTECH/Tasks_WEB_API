@@ -1,3 +1,4 @@
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tasks_WEB_API.Interfaces;
@@ -39,7 +40,6 @@ public class UserManagementController : ControllerBase
 	[HttpGet("~/SelectUser/{ID:int}")]
 	public async Task<ActionResult> GetUserById(int ID)
 	{
-
 		try
 		{
 			var utilisateur = await _UtilisateurRepository.GetUserById(ID);
@@ -73,16 +73,22 @@ public class UserManagementController : ControllerBase
 			{
 				return BadRequest("Le rôle spécifié n'est pas valide.");
 			}
-			Utilisateur newUtilisateur = new Utilisateur() { ID = identifiant, Nom = nom, Pass = mdp, Role = privilege };
-			var newUtilisateurDbContext = await _UtilisateurRepository.CreateUserById(newUtilisateur);
+			Utilisateur newUtilisateur = new() { ID = identifiant, Nom = nom, Pass = mdp, Role = privilege };
+			var listUtilisateurs = await _UtilisateurRepository.GetUsers();
 
-			if (newUtilisateurDbContext.ID == identifiant) //A revoir
+
+			foreach (var item in listUtilisateurs)
 			{
-				return Conflict("Cet utilisateur est déjà présent.");
 
+				if (item.Nom == nom && item.Role == privilege)
+				{
+
+					return Conflict("Cet utilisateur est déjà présent");
+				}
 			}
-			return Ok("La ressource a bien été créée");
+			await _UtilisateurRepository.CreateUserById(newUtilisateur);
 
+			return Ok("La ressource a bien été créée");
 		}
 		catch (Exception)
 		{
@@ -98,19 +104,17 @@ public class UserManagementController : ControllerBase
 	[HttpDelete("~/DeleteUser/{ID:int}")]
 	public async Task<IActionResult> DeleteUserById(int ID) //A revoir
 	{
-		var utilisateurs = await _UtilisateurRepository.DeleteUserById(ID);
-		var utilisateur = utilisateurs.Find(x => x.ID == ID);
+		var deleteUser = await _UtilisateurRepository.DeleteUserById(ID);
+		var listUtilisateurs = await _UtilisateurRepository.GetUsers();
+		var utilisateur = listUtilisateurs.Find(x => x.ID == ID);
+		listUtilisateurs.Remove(deleteUser);
 		try
 		{
-			if (utilisateur == null)
+			if (utilisateur != null)
 			{
-				return NotFound($"L'utilisateur [{ID}] n'existe plus dans le contexte de base de données");
+				return Conflict($"L'utilisateur [{ID}] n'a pas été supprimé dans le contexte de base de données");
 			}
-			// _content.Utilisateurs.Remove(utilisateur);
-			// await _content.SaveChangesAsync();
-
-			// var users = _content.Utilisateurs.ToListAsync();
-			// users.Result.Any();
+            
 
 			return Ok("La donnée a bien été supprimée");
 		}

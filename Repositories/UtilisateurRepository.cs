@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
-using System.Threading.Tasks;
 
 namespace Tasks_WEB_API.Repositories
 {
@@ -17,6 +16,7 @@ namespace Tasks_WEB_API.Repositories
 		public async Task<List<Utilisateur>> GetUsers()
 		{
 			var listUtilisateur = await _dataBaseMemoryContext.Utilisateur.ToListAsync();
+			await _dataBaseMemoryContext.SaveChangesAsync();
 			return listUtilisateur;
 		}
 		public async Task<Utilisateur> GetUserById(int id)
@@ -33,13 +33,13 @@ namespace Tasks_WEB_API.Repositories
 		}
 
 
-		public async Task<List<Utilisateur>> DeleteUserById(int id)
+		public async Task<Utilisateur> DeleteUserById(int id)
 		{
 			var listUtilisateur = await _dataBaseMemoryContext.Utilisateur.ToListAsync();
 			var utilisateur = await _dataBaseMemoryContext.Utilisateur.FindAsync(id);
 			listUtilisateur.Remove(utilisateur);
 			await _dataBaseMemoryContext.SaveChangesAsync();
-			return listUtilisateur;
+			return utilisateur;
 		}
 
 
