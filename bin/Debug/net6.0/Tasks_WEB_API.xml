@@ -10,7 +10,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.SelectUser(System.Int32)">
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.SelectTask(System.Int32)">
             <summary>
             Affiche les informations sur une tache précise
             </summary>
@@ -38,19 +38,19 @@
             <param name="tache"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.GetUsers">
+        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.GetUsers">
             <summary>
             Affiche la liste de tous les utilisateurs
             </summary>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.GetUserById(System.Int32)">
+        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.GetUserById(System.Int32)">
             <summary>
             Affiche les informations sur un utilisateur
             </summary>
             <param name="ID"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.CreateUserById(System.Int32,System.String,System.String,System.String)">
+        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.CreateUserById(System.Int32,System.String,System.String,System.String)">
             <summary>
             Créée un utilisateur
             </summary>
@@ -60,14 +60,14 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.DeleteUserById(System.Int32)">
+        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.DeleteUserById(System.Int32)">
             <summary>
             Supprime un utilisateur
             </summary>
             <param name="ID"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateUser(Tasks_WEB_API.Utilisateur)">
+        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.UpdateUser(Tasks_WEB_API.Utilisateur)">
             <summary>
              Met à jour les informations d'un utilisateur
             </summary>
@@ -93,6 +93,20 @@
             <summary>
             Représente l'identifiant unique d'un utilisateur.
             </summary>
+        </member>
+        <member name="M:Tasks_WEB_API.Repositories.TacheRepository.GetTaches">
+            <summary>
+            Renvoie la liste des taches.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Tasks_WEB_API.Repositories.TacheRepository.GetTaskById(System.Nullable{System.Int32})">
+            <summary>
+            Récupère une tache en fonction de son matricule depuis le contexte de base de données
+            Renvoie une tache spécifique en fonction de son matricule
+            </summary>
+            <param name="matricule"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

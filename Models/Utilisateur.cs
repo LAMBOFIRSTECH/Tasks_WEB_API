@@ -1,7 +1,7 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Tasks_WEB_API;
+
 /// <summary>
 /// Représente un utilisateur dans le système
 /// </summary>

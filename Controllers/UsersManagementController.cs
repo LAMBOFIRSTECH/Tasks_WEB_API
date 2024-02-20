@@ -6,11 +6,11 @@ namespace Tasks_WEB_API.Controllers;
 [Area("TasksDocumentation")]
 [Route("api/v1.0/[area]")]
 
-public class UserManagementController : ControllerBase
+public class UsersManagementController : ControllerBase
 {
 	private readonly IUtilisateurRepository utilisateurRepository;
 
-	public UserManagementController(IUtilisateurRepository utilisateurRepository)
+	public UsersManagementController(IUtilisateurRepository utilisateurRepository)
 	{
 
 		this.utilisateurRepository = utilisateurRepository;

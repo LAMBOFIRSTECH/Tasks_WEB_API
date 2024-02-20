@@ -102,18 +102,14 @@ public class TasksManagementController : ControllerBase
 	[HttpDelete("~/DeleteTask/{Matricule:int}")]
 	public async Task<IActionResult> DeleteUser(int Matricule)
 	{
-		var tache = await tacheRepository.Taches.FindAsync(Matricule);
+		var tache = await tacheRepository.GetTaskById(Matricule);
 		try
 		{
 			if (tache == null)
 			{
-				return NotFound($"La tache de matricule : [{Matricule}] n'existe plus dans le contexte de base de données");
+				return NotFound($"La tache de matricule : matricule=[{Matricule}] n'existe plus dans le contexte de base de données");
 			}
-			tacheRepository.Taches.Remove(tache);
-			await tacheRepository.SaveChangesAsync();
-
-			var taches = tacheRepository.Taches.ToListAsync();
-			taches.Result.Any();
+			await tacheRepository.DeleteTaskById(Matricule);
 
 			return Ok("La donnée a bien été supprimée");
 		}
@@ -122,6 +118,7 @@ public class TasksManagementController : ControllerBase
 			return StatusCode(StatusCodes.Status500InternalServerError,
 					  "Error deleting data");
 		}
+
 	}
 
 	/// <summary>
@@ -134,26 +131,22 @@ public class TasksManagementController : ControllerBase
 	{
 		try
 		{
-			var item = await tacheRepository.Taches.FindAsync(tache.Matricule);
-
+			var item = await tacheRepository.GetTaskById(tache.Matricule);
 			if (item is null)
 			{
 				return NotFound($"Cette tache n'existe plus dans le contexte de base de données");
 			}
-			if (item.Matricule == tache.Matricule)
+			if (item.Matricule== tache.Matricule)
 			{
-				item.Titre = tache.Titre;
-				item.Summary = tache.Summary;
-				item.TasksDate = new Tache.DateH() { StartDateH = tache.TasksDate.StartDateH, EndDateH = tache.TasksDate.EndDateH };
-				await tacheRepository.SaveChangesAsync();
-
+				await tacheRepository.UpdateTask(tache);
 			}
-			return Ok($"Les infos de la tache [{item.Matricule}] ont bien été modifiées.");
+			return Ok($"Les infos de la tache [{item.Matricule}] ont bien été modifiées avec succès.");
 		}
 		catch (Exception)
 		{
 			return StatusCode(StatusCodes.Status500InternalServerError,
-					  "Error deleting data");
+					  "Error lors de la suppression de la ressource");
 		}
 	}
+		
 }

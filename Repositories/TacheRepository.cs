@@ -28,7 +28,8 @@ namespace Tasks_WEB_API.Repositories
 		/// </summary>
 		/// <param name="matricule"></param>
 		/// <returns></returns>
-		public async Task<Tache> GetTaskById(int matricule)
+		
+		public async Task<Tache> GetTaskById(int? matricule)
 		{
 			var tache = await dataBaseMemoryContext.Taches.FirstOrDefaultAsync(t => t.Matricule == matricule);
 			return tache;
@@ -58,19 +59,18 @@ namespace Tasks_WEB_API.Repositories
 			Tache newtache = new()
 			{
 
-				Matricule = tache1.Matricule,
-				Titre = tache1.Titre,
-				Summary = tache1.Summary,
+				Matricule = tache.Matricule,
+				Titre = tache.Titre,
+				Summary = tache.Summary,
 				TasksDate = new()
 				{
-					StartDateH = tache1.TasksDate.StartDateH,
-					EndDateH = tache1.TasksDate.EndDateH
+					StartDateH = tache.TasksDate.StartDateH,
+					EndDateH = tache.TasksDate.EndDateH
 				}
 			};
-			dataBaseMemoryContext.Taches.Add(newtache);
+			await dataBaseMemoryContext.Taches.AddAsync(newtache);
 			await dataBaseMemoryContext.SaveChangesAsync();
 			return newtache;
 		}
-
 	}
 }
