@@ -6,46 +6,52 @@ namespace Tasks_WEB_API.Repositories
 {
 	public class UtilisateurRepository : IUtilisateurRepository
 	{
-		private readonly DailyTasksMigrationsContext _dataBaseMemoryContext;
+		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
 		public UtilisateurRepository(DailyTasksMigrationsContext dataBaseMemoryContext)
 		{
 
-			_dataBaseMemoryContext = dataBaseMemoryContext;
+			this.dataBaseMemoryContext = dataBaseMemoryContext;
 
 		}
 		public async Task<List<Utilisateur>> GetUsers()
 		{
-			var listUtilisateur = await _dataBaseMemoryContext.Utilisateur.ToListAsync();
-			await _dataBaseMemoryContext.SaveChangesAsync();
+			var listUtilisateur = await dataBaseMemoryContext.Utilisateurs.ToListAsync();
+			await dataBaseMemoryContext.SaveChangesAsync();
 			return listUtilisateur;
 		}
 		public async Task<Utilisateur> GetUserById(int id)
 		{
-			var utilisateur = await _dataBaseMemoryContext.Utilisateur.FirstOrDefaultAsync(u => u.ID == id);
+			var utilisateur = await dataBaseMemoryContext.Utilisateurs.FirstOrDefaultAsync(u => u.ID == id);
 			return utilisateur;
 		}
 
 		public async Task<Utilisateur> CreateUserById(Utilisateur utilisateur)
 		{
-			await _dataBaseMemoryContext.Utilisateur.AddAsync(utilisateur);
-			await _dataBaseMemoryContext.SaveChangesAsync();
+			await dataBaseMemoryContext.Utilisateurs.AddAsync(utilisateur);
+			await dataBaseMemoryContext.SaveChangesAsync();
 			return utilisateur;
 		}
 
 
-		public async Task<Utilisateur> DeleteUserById(int id)
+		public async Task DeleteUserById(int id)
 		{
-			var listUtilisateur = await _dataBaseMemoryContext.Utilisateur.ToListAsync();
-			var utilisateur = await _dataBaseMemoryContext.Utilisateur.FindAsync(id);
-			listUtilisateur.Remove(utilisateur);
-			await _dataBaseMemoryContext.SaveChangesAsync();
-			return utilisateur;
+			var result = await dataBaseMemoryContext.Utilisateurs.FirstOrDefaultAsync(u => u.ID == id);
+			if (result != null)
+			{
+				dataBaseMemoryContext.Utilisateurs.Remove(result);
+
+				await dataBaseMemoryContext.SaveChangesAsync();
+			}
 		}
 
-
-		public Utilisateur UpdateUser(Utilisateur utilisateur)
+		public async Task<Utilisateur> UpdateUser(Utilisateur utilisateur)
 		{
-			throw new NotImplementedException();
+			var user = await dataBaseMemoryContext.Utilisateurs.FindAsync(utilisateur.ID);
+			dataBaseMemoryContext.Utilisateurs.Remove(user);
+			Utilisateur utilisateur1 = new() { ID = utilisateur.ID, Nom = utilisateur.Nom, Pass = utilisateur.Pass, Role = utilisateur.Role };
+			dataBaseMemoryContext.Utilisateurs.Add(utilisateur1);
+			await dataBaseMemoryContext.SaveChangesAsync();
+			return utilisateur1;
 		}
 	}
 

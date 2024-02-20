@@ -1,10 +1,5 @@
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Tasks_WEB_API.Interfaces;
-using Tasks_WEB_API.Models;
-
-
 namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
@@ -13,12 +8,12 @@ namespace Tasks_WEB_API.Controllers;
 
 public class UserManagementController : ControllerBase
 {
-	private readonly IUtilisateurRepository _UtilisateurRepository;
+	private readonly IUtilisateurRepository utilisateurRepository;
 
 	public UserManagementController(IUtilisateurRepository utilisateurRepository)
 	{
 
-		_UtilisateurRepository = utilisateurRepository;
+		this.utilisateurRepository = utilisateurRepository;
 
 	}
 
@@ -28,7 +23,7 @@ public class UserManagementController : ControllerBase
 	[HttpGet("~/GetUsers")]
 	public async Task<ActionResult> GetUsers()
 	{
-		var users = await _UtilisateurRepository.GetUsers();
+		var users = await utilisateurRepository.GetUsers();
 		return Ok(users);
 	}
 
@@ -42,7 +37,7 @@ public class UserManagementController : ControllerBase
 	{
 		try
 		{
-			var utilisateur = await _UtilisateurRepository.GetUserById(ID);
+			var utilisateur = await utilisateurRepository.GetUserById(ID);
 			if (utilisateur != null)
 			{
 				return Ok(utilisateur);
@@ -74,9 +69,7 @@ public class UserManagementController : ControllerBase
 				return BadRequest("Le rôle spécifié n'est pas valide.");
 			}
 			Utilisateur newUtilisateur = new() { ID = identifiant, Nom = nom, Pass = mdp, Role = privilege };
-			var listUtilisateurs = await _UtilisateurRepository.GetUsers();
-
-
+			var listUtilisateurs = await utilisateurRepository.GetUsers();
 			foreach (var item in listUtilisateurs)
 			{
 
@@ -86,7 +79,7 @@ public class UserManagementController : ControllerBase
 					return Conflict("Cet utilisateur est déjà présent");
 				}
 			}
-			await _UtilisateurRepository.CreateUserById(newUtilisateur);
+			await utilisateurRepository.CreateUserById(newUtilisateur);
 
 			return Ok("La ressource a bien été créée");
 		}
@@ -102,19 +95,17 @@ public class UserManagementController : ControllerBase
 	/// <param name="ID"></param>
 	/// <returns></returns>
 	[HttpDelete("~/DeleteUser/{ID:int}")]
-	public async Task<IActionResult> DeleteUserById(int ID) //A revoir
+	public async Task<IActionResult> DeleteUserById(int ID)
 	{
-		var deleteUser = await _UtilisateurRepository.DeleteUserById(ID);
-		var listUtilisateurs = await _UtilisateurRepository.GetUsers();
-		var utilisateur = listUtilisateurs.Find(x => x.ID == ID);
-		listUtilisateurs.Remove(deleteUser);
+		var utilisateur = await utilisateurRepository.GetUserById(ID);
 		try
 		{
-			if (utilisateur != null)
+			if (utilisateur == null)
 			{
-				return Conflict($"L'utilisateur [{ID}] n'a pas été supprimé dans le contexte de base de données");
+				return NotFound($"L'utilisateur id=[{ID}] n'a pas été trouvé dans le contexte de base de données");
 			}
-            
+
+			await utilisateurRepository.DeleteUserById(ID);
 
 			return Ok("La donnée a bien été supprimée");
 		}
@@ -126,35 +117,31 @@ public class UserManagementController : ControllerBase
 
 	}
 
-	// /// <summary>
-	// /// Met à jour les informations d'un utilisateur
-	// /// </summary>
-	// /// <returns></returns>
-	// [HttpPut("~/UpdateUser")]
-	// public async Task<IActionResult> UpdateUser([FromBody] Utilisateur utilisateur)
-	// {
-	// 	try
-	// 	{
-	// 		var item = await _content.Utilisateurs.FindAsync(utilisateur.ID);
-
-	// 		if (item is null)
-	// 		{
-	// 			return NotFound($"Cet utilisateur n'existe plus dans le contexte de base de données");
-	// 		}
-	// 		if (item.ID == utilisateur.ID)
-	// 		{
-	// 			item.Nom = utilisateur.Nom;
-	// 			item.Pass = utilisateur.Pass;
-	// 			item.Role = utilisateur.Role;
-	// 			await _content.SaveChangesAsync();
-
-	// 		}
-	// 		return Ok($"Les infos de l'utilisateur [{item.ID}] ont bien été modifiées.");
-	// 	}
-	// 	catch (Exception)
-	// 	{
-	// 		return StatusCode(StatusCodes.Status500InternalServerError,
-	// 				  "Error deleting data");
-	// 	}
-	// }
+	/// <summary>
+	///  Met à jour les informations d'un utilisateur
+	/// </summary>
+	/// <param name="utilisateur"></param>
+	/// <returns></returns>
+	[HttpPut("~/UpdateUser")]
+	public async Task<IActionResult> UpdateUser([FromBody] Utilisateur utilisateur)
+	{
+		try
+		{
+			var item = await utilisateurRepository.GetUserById(utilisateur.ID);
+			if (item is null)
+			{
+				return NotFound($"Cet utilisateur n'existe plus dans le contexte de base de données");
+			}
+			if (item.ID == utilisateur.ID)
+			{
+				await utilisateurRepository.UpdateUser(utilisateur);
+			}
+			return Ok($"Les infos de l'utilisateur [{item.ID}] ont bien été modifiées.");
+		}
+		catch (Exception)
+		{
+			return StatusCode(StatusCodes.Status500InternalServerError,
+					  "Error deleting data");
+		}
+	}
 }

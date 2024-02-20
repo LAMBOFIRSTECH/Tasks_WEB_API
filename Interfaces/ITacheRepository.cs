@@ -6,8 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tasks_WEB_API.Interfaces
 {
-    public interface ITacheRepository
-    {
-        List<Tache> GetTaches();
-    }
+	public interface ITacheRepository
+	{
+		Task<List<Tache>> GetTaches();
+		Task<Tache> GetTaskById(int id);
+		Task<Tache> CreateTaskById(Tache Tache);
+		Task<Tache> UpdateTask(Tache Tache);
+		Task DeleteTaskById(int id);
+	}
 }

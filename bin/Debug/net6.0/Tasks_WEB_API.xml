@@ -67,6 +67,13 @@
             <param name="ID"></param>
             <returns></returns>
         </member>
+        <member name="M:Tasks_WEB_API.Controllers.UserManagementController.UpdateUser(Tasks_WEB_API.Utilisateur)">
+            <summary>
+             Met à jour les informations d'un utilisateur
+            </summary>
+            <param name="utilisateur"></param>
+            <returns></returns>
+        </member>
         <member name="T:Tasks_WEB_API.Tache">
             <summary>
             Représente une tache dans le système

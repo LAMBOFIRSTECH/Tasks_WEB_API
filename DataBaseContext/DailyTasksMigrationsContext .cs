@@ -9,7 +9,7 @@ public class DailyTasksMigrationsContext : DbContext
 	{
 	}
 
-	public DbSet<Utilisateur> Utilisateur { get; set; } = null!;
+	public DbSet<Utilisateur> Utilisateurs { get; set; } = null!;
 	public DbSet<Tache> Taches { get; set; } = null!;
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)

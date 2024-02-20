@@ -11,7 +11,8 @@ namespace Tasks_WEB_API.Interfaces
 		Task<List<Utilisateur>> GetUsers();
 		Task<Utilisateur> GetUserById(int id);
 		Task<Utilisateur> CreateUserById(Utilisateur utilisateur);
-		Task<Utilisateur> DeleteUserById(int id);
-		Utilisateur UpdateUser(Utilisateur utilisateur);
+		Task<Utilisateur> UpdateUser(Utilisateur utilisateur);
+		Task DeleteUserById(int id);
+		
 	}
 }
