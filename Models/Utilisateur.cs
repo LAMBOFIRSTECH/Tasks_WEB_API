@@ -18,8 +18,8 @@ public class Utilisateur
 	public string? Pass { get; set; }
 	public enum Privilege
 	{
-		ADMINISTRATEUR,
-		UTILISATEUR
+		Admin,
+		UserX
 
 	}
 	[EnumDataType(typeof(Privilege))]

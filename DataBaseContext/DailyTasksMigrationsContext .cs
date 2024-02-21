@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Tasks_WEB_API.Models;
 
 public class DailyTasksMigrationsContext : DbContext
@@ -20,7 +19,6 @@ public class DailyTasksMigrationsContext : DbContext
 		// modelBuilder.Entity<Utilisateur>().HasKey(u => u.ID);
 		base.OnModelCreating(modelBuilder);
 	}
-
 }
 
 

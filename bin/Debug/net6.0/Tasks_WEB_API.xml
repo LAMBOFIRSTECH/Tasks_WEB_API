@@ -50,7 +50,7 @@
             <param name="ID"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.CreateUserById(System.Int32,System.String,System.String,System.String)">
+        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.CreateUser(System.Int32,System.String,System.String,System.String)">
             <summary>
             Créée un utilisateur
             </summary>

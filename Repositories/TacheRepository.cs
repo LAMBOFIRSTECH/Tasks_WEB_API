@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tasks_WEB_API.Repositories
 {
-	public class TacheRepository : ITacheRepository
+	public class TacheRepository :IReadTasksMethods,IWriteTasksMethods
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
 		public TacheRepository(DailyTasksMigrationsContext dataBaseMemoryContext)
@@ -28,13 +28,13 @@ namespace Tasks_WEB_API.Repositories
 		/// </summary>
 		/// <param name="matricule"></param>
 		/// <returns></returns>
-		
+
 		public async Task<Tache> GetTaskById(int? matricule)
 		{
 			var tache = await dataBaseMemoryContext.Taches.FirstOrDefaultAsync(t => t.Matricule == matricule);
 			return tache;
 		}
-		public async Task<Tache> CreateTaskById(Tache tache)
+		public async Task<Tache> CreateTask(Tache tache)
 		{
 			await dataBaseMemoryContext.Taches.AddAsync(tache);
 			await dataBaseMemoryContext.SaveChangesAsync();
@@ -58,7 +58,6 @@ namespace Tasks_WEB_API.Repositories
 			dataBaseMemoryContext.Taches.Remove(tache1);
 			Tache newtache = new()
 			{
-
 				Matricule = tache.Matricule,
 				Titre = tache.Titre,
 				Summary = tache.Summary,
@@ -72,5 +71,6 @@ namespace Tasks_WEB_API.Repositories
 			await dataBaseMemoryContext.SaveChangesAsync();
 			return newtache;
 		}
+
 	}
 }

@@ -8,14 +8,12 @@ namespace Tasks_WEB_API.Controllers;
 [Route("api/v1.0/[Controller]")]
 public class TasksManagementController : ControllerBase
 {
-	private readonly ITacheRepository tacheRepository;
-
-
-	public TasksManagementController(ITacheRepository tacheRepository)
+	private readonly IReadTasksMethods readMethods;
+	private readonly IWriteTasksMethods writeMethods;
+	public TasksManagementController(IReadTasksMethods readMethods,IWriteTasksMethods writeMethods)
 	{
-
-		this.tacheRepository = tacheRepository;
-
+		this.readMethods = readMethods;
+		this.writeMethods = writeMethods;
 	}
 
 	/// <summary>
@@ -25,7 +23,7 @@ public class TasksManagementController : ControllerBase
 	[HttpGet("~/GetTasks")]
 	public async Task<IActionResult> Get()
 	{
-		var taches = await tacheRepository.GetTaches();
+		var taches = await readMethods.GetTaches();
 		return Ok(taches);
 	}
 
@@ -39,7 +37,7 @@ public class TasksManagementController : ControllerBase
 	{
 		try
 		{
-			var tache = await tacheRepository.GetTaskById(Matricule);
+			var tache = await readMethods.GetTaskById(Matricule);
 			if (tache != null)
 			{
 				return Ok(tache);
@@ -50,7 +48,6 @@ public class TasksManagementController : ControllerBase
 		{
 			return StatusCode(StatusCodes.Status500InternalServerError, $"Une erreur s'est produite dans la recherche de la ressource {Matricule}.");
 		}
-
 	}
 
 	/// <summary>
@@ -63,7 +60,6 @@ public class TasksManagementController : ControllerBase
 	{
 		try
 		{
-
 			Tache newTache = new()
 			{
 				Matricule = tache.Matricule,
@@ -75,17 +71,16 @@ public class TasksManagementController : ControllerBase
 					StartDateH = tache.TasksDate.StartDateH
 				}
 			};
-			var listTaches = await tacheRepository.GetTaches();
+			var listTaches = await readMethods.GetTaches();
 			foreach (var item in listTaches)
 			{
-
 				if (item.Matricule == tache.Matricule)
 				{
 
 					return Conflict("Cette tache est déjà présente");
 				}
 			}
-			await tacheRepository.CreateTaskById(newTache);
+			await writeMethods.CreateTask(newTache);
 			return Ok("La ressource a bien été créée");
 		}
 		catch (Exception)
@@ -102,14 +97,14 @@ public class TasksManagementController : ControllerBase
 	[HttpDelete("~/DeleteTask/{Matricule:int}")]
 	public async Task<IActionResult> DeleteUser(int Matricule)
 	{
-		var tache = await tacheRepository.GetTaskById(Matricule);
+		var tache = await readMethods.GetTaskById(Matricule);
 		try
 		{
 			if (tache == null)
 			{
 				return NotFound($"La tache de matricule : matricule=[{Matricule}] n'existe plus dans le contexte de base de données");
 			}
-			await tacheRepository.DeleteTaskById(Matricule);
+			await writeMethods.DeleteTaskById(Matricule);
 
 			return Ok("La donnée a bien été supprimée");
 		}
@@ -118,7 +113,6 @@ public class TasksManagementController : ControllerBase
 			return StatusCode(StatusCodes.Status500InternalServerError,
 					  "Error deleting data");
 		}
-
 	}
 
 	/// <summary>
@@ -131,14 +125,14 @@ public class TasksManagementController : ControllerBase
 	{
 		try
 		{
-			var item = await tacheRepository.GetTaskById(tache.Matricule);
+			var item = await readMethods.GetTaskById(tache.Matricule);
 			if (item is null)
 			{
 				return NotFound($"Cette tache n'existe plus dans le contexte de base de données");
 			}
-			if (item.Matricule== tache.Matricule)
+			if (item.Matricule == tache.Matricule)
 			{
-				await tacheRepository.UpdateTask(tache);
+				await writeMethods.UpdateTask(tache);
 			}
 			return Ok($"Les infos de la tache [{item.Matricule}] ont bien été modifiées avec succès.");
 		}
@@ -148,5 +142,4 @@ public class TasksManagementController : ControllerBase
 					  "Error lors de la suppression de la ressource");
 		}
 	}
-		
 }

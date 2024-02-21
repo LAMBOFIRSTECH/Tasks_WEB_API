@@ -1,20 +1,23 @@
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Microsoft.AspNetCore.Mvc;
 using Tasks_WEB_API.Interfaces;
+using Xunit.Sdk;
 namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
 [Area("TasksDocumentation")]
 [Route("api/v1.0/[area]")]
-
 public class UsersManagementController : ControllerBase
 {
-	private readonly IUtilisateurRepository utilisateurRepository;
+	private readonly IAuthentificationRepository authentification;
+	private readonly IReadUsersMethods readMethods;
+	private readonly IWriteUsersMethods writeMethods;
 
-	public UsersManagementController(IUtilisateurRepository utilisateurRepository)
+	public UsersManagementController(IAuthentificationRepository authentification, IReadUsersMethods readMethods, IWriteUsersMethods writeMethods)
 	{
-
-		this.utilisateurRepository = utilisateurRepository;
-
+		this.authentification = authentification;
+		this.readMethods = readMethods;
+		this.writeMethods = writeMethods;
 	}
 
 	/// <summary>
@@ -23,7 +26,7 @@ public class UsersManagementController : ControllerBase
 	[HttpGet("~/GetUsers")]
 	public async Task<ActionResult> GetUsers()
 	{
-		var users = await utilisateurRepository.GetUsers();
+		var users = await readMethods.GetUsers();
 		return Ok(users);
 	}
 
@@ -37,7 +40,7 @@ public class UsersManagementController : ControllerBase
 	{
 		try
 		{
-			var utilisateur = await utilisateurRepository.GetUserById(ID);
+			var utilisateur = await readMethods.GetUserById(ID);
 			if (utilisateur != null)
 			{
 				return Ok(utilisateur);
@@ -59,7 +62,7 @@ public class UsersManagementController : ControllerBase
 	/// <param name="role"></param>
 	/// <returns></returns>
 	[HttpPost("~/CreateUser/")]
-	public async Task<IActionResult> CreateUserById(int identifiant, string nom, string mdp, string role)
+	public async Task<IActionResult> CreateUser(int identifiant, string nom, string mdp, string role)
 	{
 		try
 		{
@@ -69,18 +72,16 @@ public class UsersManagementController : ControllerBase
 				return BadRequest("Le rôle spécifié n'est pas valide.");
 			}
 			Utilisateur newUtilisateur = new() { ID = identifiant, Nom = nom, Pass = mdp, Role = privilege };
-			var listUtilisateurs = await utilisateurRepository.GetUsers();
+			var listUtilisateurs = await readMethods.GetUsers();
 			foreach (var item in listUtilisateurs)
 			{
-
 				if (item.Nom == nom && item.Role == privilege)
 				{
-
 					return Conflict("Cet utilisateur est déjà présent");
 				}
 			}
-			await utilisateurRepository.CreateUserById(newUtilisateur);
-
+			
+			await writeMethods.CreateUser(newUtilisateur);
 			return Ok("La ressource a bien été créée");
 		}
 		catch (Exception)
@@ -97,7 +98,7 @@ public class UsersManagementController : ControllerBase
 	[HttpDelete("~/DeleteUser/{ID:int}")]
 	public async Task<IActionResult> DeleteUserById(int ID)
 	{
-		var utilisateur = await utilisateurRepository.GetUserById(ID);
+		var utilisateur = await readMethods.GetUserById(ID);
 		try
 		{
 			if (utilisateur == null)
@@ -105,16 +106,13 @@ public class UsersManagementController : ControllerBase
 				return NotFound($"L'utilisateur id=[{ID}] n'a pas été trouvé dans le contexte de base de données");
 			}
 
-			await utilisateurRepository.DeleteUserById(ID);
-
+			await writeMethods.DeleteUserById(ID);
 			return Ok("La donnée a bien été supprimée");
 		}
 		catch (Exception)
 		{
-			return StatusCode(StatusCodes.Status500InternalServerError,
-					  "Error deleting data");
+			return StatusCode(StatusCodes.Status500InternalServerError, "Error deleting data");
 		}
-
 	}
 
 	/// <summary>
@@ -127,15 +125,16 @@ public class UsersManagementController : ControllerBase
 	{
 		try
 		{
-			var item = await utilisateurRepository.GetUserById(utilisateur.ID);
+			var item = await readMethods.GetUserById(utilisateur.ID);
 			if (item is null)
 			{
 				return NotFound($"Cet utilisateur n'existe plus dans le contexte de base de données");
 			}
-			if (item.ID == utilisateur.ID)
-			{
-				await utilisateurRepository.UpdateUser(utilisateur);
-			}
+			// if (item.ID == utilisateur.ID)
+			// {
+			// 	await utilisateurRepository.UpdateUser(utilisateur);
+			// }
+			await (item.ID == utilisateur.ID ? writeMethods.UpdateUser(utilisateur) : Task.CompletedTask);
 			return Ok($"Les infos de l'utilisateur [{item.ID}] ont bien été modifiées.");
 		}
 		catch (Exception)

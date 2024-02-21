@@ -9,7 +9,6 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(con =>
 {
@@ -51,8 +50,19 @@ builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
 	opt.UseInMemoryDatabase(conStrings);
 });
 
-builder.Services.AddScoped<IUtilisateurRepository,UtilisateurRepository>();
-builder.Services.AddScoped<ITacheRepository,TacheRepository>();
+builder.Services.AddScoped<IReadUsersMethods, UtilisateurRepository>();
+builder.Services.AddScoped<IWriteUsersMethods, UtilisateurRepository>();
+builder.Services.AddScoped<IReadTasksMethods, TacheRepository>();
+builder.Services.AddScoped<IWriteTasksMethods, TacheRepository>();
+// Définition de la politique d'authentification pour chaque groupe de d'utilisateur
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("AdminPolicy", policy =>
+		policy.RequireRole("Admin"));
+
+	options.AddPolicy("UserPolicy", policy =>
+		policy.RequireRole("UserX"));
+});
 
 var app = builder.Build();
 
@@ -69,12 +79,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(MyAllowSpecificOrigins);
 var rewriteOptions = new RewriteOptions()
-	.AddRewrite(  @"^www\.taskmoniroting/Taskmanagement",   "https://localhost:7082/index.html",true);
-	  
+	.AddRewrite(@"^www\.taskmoniroting/Taskmanagement", "https://localhost:7082/index.html", true);
 
 app.UseRewriter(rewriteOptions);
 app.UseAuthorization();
-
-app.MapControllers(); 
+app.MapControllers();
 app.UseRouting();
 app.Run();

@@ -4,14 +4,12 @@ using Tasks_WEB_API.Models;
 
 namespace Tasks_WEB_API.Repositories
 {
-	public class UtilisateurRepository : IUtilisateurRepository
+	public class UtilisateurRepository:IReadUsersMethods,IWriteUsersMethods
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
 		public UtilisateurRepository(DailyTasksMigrationsContext dataBaseMemoryContext)
 		{
-
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
-
 		}
 		public async Task<List<Utilisateur>> GetUsers()
 		{
@@ -25,13 +23,12 @@ namespace Tasks_WEB_API.Repositories
 			return utilisateur;
 		}
 
-		public async Task<Utilisateur> CreateUserById(Utilisateur utilisateur)
+		public async Task<Utilisateur> CreateUser(Utilisateur utilisateur)
 		{
 			await dataBaseMemoryContext.Utilisateurs.AddAsync(utilisateur);
 			await dataBaseMemoryContext.SaveChangesAsync();
 			return utilisateur;
 		}
-
 
 		public async Task DeleteUserById(int id)
 		{
@@ -43,7 +40,6 @@ namespace Tasks_WEB_API.Repositories
 				await dataBaseMemoryContext.SaveChangesAsync();
 			}
 		}
-
 		public async Task<Utilisateur> UpdateUser(Utilisateur utilisateur)
 		{
 			var user = await dataBaseMemoryContext.Utilisateurs.FindAsync(utilisateur.ID);
@@ -54,5 +50,4 @@ namespace Tasks_WEB_API.Repositories
 			return utilisateur1;
 		}
 	}
-
 }
