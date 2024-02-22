@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -8,6 +9,7 @@ using Tasks_WEB_API.Repositories;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+		
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(con =>
@@ -54,15 +56,20 @@ builder.Services.AddScoped<IReadUsersMethods, UtilisateurRepository>();
 builder.Services.AddScoped<IWriteUsersMethods, UtilisateurRepository>();
 builder.Services.AddScoped<IReadTasksMethods, TacheRepository>();
 builder.Services.AddScoped<IWriteTasksMethods, TacheRepository>();
-// Définition de la politique d'authentification pour chaque groupe de d'utilisateur
-builder.Services.AddAuthorization(options =>
-{
-	options.AddPolicy("AdminPolicy", policy =>
-		policy.RequireRole("Admin"));
+builder.Services.AddAuthentication("BasicAuthentication")
+	.AddScheme<AuthenticationSchemeOptions, AuthentificationBasic>("BasicAuthentication", options => { });
 
-	options.AddPolicy("UserPolicy", policy =>
-		policy.RequireRole("UserX"));
-});
+builder.Services.AddAuthentication("JwtAuthentication")
+	.AddScheme<AuthenticationSchemeOptions, AuthentificationJwt>("JwtAuthentication", options => { });
+// Définition de la politique d'authentification pour chaque groupe de d'utilisateur  
+// builder.Services.AddAuthorization(options =>
+// {
+// 	options.AddPolicy("AdminPolicy", policy =>
+// 		policy.RequireRole("Admin"));
+
+// 	options.AddPolicy("UserPolicy", policy =>
+// 		policy.RequireRole("UserX"));
+// });
 
 var app = builder.Build();
 
@@ -82,7 +89,13 @@ var rewriteOptions = new RewriteOptions()
 	.AddRewrite(@"^www\.taskmoniroting/Taskmanagement", "https://localhost:7082/index.html", true);
 
 app.UseRewriter(rewriteOptions);
-app.UseAuthorization();
-app.MapControllers();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+	endpoints.MapControllers();
+});
+
+// app.MapControllers(); Obsolète
 app.Run();

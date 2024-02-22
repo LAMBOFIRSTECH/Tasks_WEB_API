@@ -1,21 +1,21 @@
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tasks_WEB_API.Interfaces;
-using Xunit.Sdk;
 namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
 [Area("TasksDocumentation")]
-[Route("api/v1.0/[area]")]
+[Route("api/v1.0/")]
+[Authorize]
 public class UsersManagementController : ControllerBase
 {
-	private readonly IAuthentificationRepository authentification;
+	//private readonly IAuthentificationRepository authentification;
 	private readonly IReadUsersMethods readMethods;
 	private readonly IWriteUsersMethods writeMethods;
 
-	public UsersManagementController(IAuthentificationRepository authentification, IReadUsersMethods readMethods, IWriteUsersMethods writeMethods)
+	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods)//IAuthentificationRepository authentification, 
 	{
-		this.authentification = authentification;
+		//this.authentification = authentification;
 		this.readMethods = readMethods;
 		this.writeMethods = writeMethods;
 	}

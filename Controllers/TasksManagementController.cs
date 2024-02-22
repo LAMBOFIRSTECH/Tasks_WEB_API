@@ -5,7 +5,8 @@ namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
 //[Area("TasksDocumentation")]
-[Route("api/v1.0/[Controller]")]
+[Route("[Controller]")]
+
 public class TasksManagementController : ControllerBase
 {
 	private readonly IReadTasksMethods readMethods;
@@ -20,8 +21,8 @@ public class TasksManagementController : ControllerBase
 	/// Affiche la liste de toutes les taches
 	/// </summary>
 	/// <returns></returns>
-	[HttpGet("~/GetTasks")]
-	public async Task<IActionResult> Get()
+	[HttpGet("~/GetAllTasks")]
+	public async Task<IActionResult> GetAllTasks()
 	{
 		var taches = await readMethods.GetTaches();
 		return Ok(taches);
