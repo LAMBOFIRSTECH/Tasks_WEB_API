@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tasks_WEB_API.Interfaces;
@@ -21,6 +22,7 @@ public class TasksManagementController : ControllerBase
 	/// Affiche la liste de toutes les taches
 	/// </summary>
 	/// <returns></returns>
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/GetAllTasks")]
 	public async Task<IActionResult> GetAllTasks()
 	{
@@ -33,6 +35,7 @@ public class TasksManagementController : ControllerBase
 	/// </summary>
 	/// <param name="Matricule"></param>
 	/// <returns></returns>
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/SelectTask/{Matricule:int}")]
 	public async Task<IActionResult> SelectTask(int Matricule)
 	{

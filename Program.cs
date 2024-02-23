@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Tasks_WEB_API;
 using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
 using Tasks_WEB_API.Repositories;
@@ -56,20 +57,51 @@ builder.Services.AddScoped<IReadUsersMethods, UtilisateurRepository>();
 builder.Services.AddScoped<IWriteUsersMethods, UtilisateurRepository>();
 builder.Services.AddScoped<IReadTasksMethods, TacheRepository>();
 builder.Services.AddScoped<IWriteTasksMethods, TacheRepository>();
+builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("BasicAuthentication")
 	.AddScheme<AuthenticationSchemeOptions, AuthentificationBasic>("BasicAuthentication", options => { });
 
-builder.Services.AddAuthentication("JwtAuthentication")
-	.AddScheme<AuthenticationSchemeOptions, AuthentificationJwt>("JwtAuthentication", options => { });
-// Définition de la politique d'authentification pour chaque groupe de d'utilisateur  
-// builder.Services.AddAuthorization(options =>
-// {
-// 	options.AddPolicy("AdminPolicy", policy =>
-// 		policy.RequireRole("Admin"));
+// builder.Services.AddAuthentication("JwtAuthentication")
+// 	.AddScheme<AuthenticationSchemeOptions, AuthentificationJwt>("JwtAuthentication", options => { });
 
-// 	options.AddPolicy("UserPolicy", policy =>
-// 		policy.RequireRole("UserX"));
-// });
+
+//--------------------------------------
+
+// Configuration de l'authentification par JWT pour les administrateurs
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+// 	.AddJwtBearer("AdminJWT", options =>
+// 	{
+// 		// Configuration des paramètres JWT
+// 		var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+// 		var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+
+// 		options.TokenValidationParameters = new TokenValidationParameters
+// 		{
+// 			ValidateIssuerSigningKey = true,
+// 			IssuerSigningKey = new SymmetricSecurityKey(key),
+// 			ValidateIssuer = false,
+// 			ValidateAudience = false
+// 		};
+// 	});
+
+
+
+// Dans ConfigureServices
+builder.Services.AddAuthorization(options =>
+{
+    // Politique d'autorisation pour les administrateurs
+    options.AddPolicy("AdminPolicy", policy =>
+        policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
+              .RequireAuthenticatedUser() ); // L'utilisateur doit être authentifié
+            //   .AddAuthenticationSchemes("AdminJWT"));  // Utilisation du schéma d'authentification JWT pour cette politique
+
+    // Politique d'autorisation pour les utilisateurs non-administrateurs
+    options.AddPolicy("UserPolicy", policy =>
+        policy.RequireRole(nameof(Utilisateur.Privilege.UserX))
+              .RequireAuthenticatedUser()  // L'utilisateur doit être authentifié
+              .AddAuthenticationSchemes("BasicAuthentication"));  // Utilisation du schéma d'authentification de base pour cette politique
+});
+
 
 var app = builder.Build();
 

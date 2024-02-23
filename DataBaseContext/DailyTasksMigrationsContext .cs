@@ -19,6 +19,7 @@ public class DailyTasksMigrationsContext : DbContext
 		// modelBuilder.Entity<Utilisateur>().HasKey(u => u.ID);
 		base.OnModelCreating(modelBuilder);
 	}
+	
 }
 
 

@@ -1,20 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
-using System;
-using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc.Filters;
-
+using System.Security.Claims;
+using Microsoft.VisualBasic;
 namespace Tasks_WEB_API.Repositories
 {
-	public class AuthentificationBasic : AuthenticationHandler<AuthenticationSchemeOptions>,IAuthorizationFilter//, IAuthentificationRepository //,IUtilisateurRepository,ITacheRepository
+	public class AuthentificationBasic : AuthenticationHandler<AuthenticationSchemeOptions>//, IAuthorizationFilter//, IAuthentificationRepository //,IUtilisateurRepository,ITacheRepository
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
 		public AuthentificationBasic(DailyTasksMigrationsContext dataBaseMemoryContext, IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -24,14 +19,11 @@ namespace Tasks_WEB_API.Repositories
 		: base(options, logger, encoder, clock)
 		{
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
+			
 		}
 
-        public void OnAuthorization(AuthorizationFilterContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
+		
+		protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
 		{
 			if (!Request.Headers.ContainsKey("Authorization"))
 				return AuthenticateResult.Fail("Authorization header missing");
@@ -41,21 +33,28 @@ namespace Tasks_WEB_API.Repositories
 				var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
 				if (authHeader.Scheme.Equals("Basic", StringComparison.OrdinalIgnoreCase))
 				{
-					var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
+					var credentialBytes = Convert.FromBase64String(authHeader.Parameter);//header du token
 					var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
 					var username = credentials[0];
 					var password = credentials[1];
 
+
 					// Votre logique d'authentification ici
 					if (await BasicAuthentification(username, password))
 					{
-						// Créer un ClaimsPrincipal avec le nom d'utilisateur
-						var claims = new[] { new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, username) };
-						var identity = new System.Security.Claims.ClaimsIdentity(claims, Scheme.Name);
-						var principal = new System.Security.Claims.ClaimsPrincipal(identity);
+						// Créer un ClaimsPrincipal avec le nom d'utilisateur playload du token
+						var claims = new[]
+						{
+						new Claim(ClaimTypes.Name, username),
+						new Claim(ClaimTypes.Role, Utilisateur.Privilege.UserX.ToString())
+						};
+
+						var identity = new ClaimsIdentity(claims, Scheme.Name);
+						var principal = new ClaimsPrincipal(identity);
 
 						// Assigner le principal à la propriété Principal de l'objet context
-						var ticket = new AuthenticationTicket(principal, Scheme.Name);
+						var ticket = new AuthenticationTicket(principal, Scheme.Name);//signature header http -->Authorization: Basic am9objpwYXNzd29yZA==
+
 						return AuthenticateResult.Success(ticket);
 					}
 					else
@@ -74,16 +73,13 @@ namespace Tasks_WEB_API.Repositories
 			}
 		}
 
-	
-		
-		private async Task<bool> BasicAuthentification(string username, string password) //a deboguer
-		{
-			// Votre logique d'authentification réelle asynchrone ici
-			// Par exemple, vérifier les informations d'identification dans une base de données
-			// ou un autre magasin de données
 
-			// Simulons une attente asynchrone ici pour une démonstration
+
+		private async Task<bool> BasicAuthentification(string username, string password)
+		{
 			var users = dataBaseMemoryContext.Utilisateurs.ToList();
+
+
 			foreach (var item in users)
 			{
 				if (item.Nom == username && item.Pass == password)
@@ -93,6 +89,7 @@ namespace Tasks_WEB_API.Repositories
 				}
 			}
 			await Task.Delay(1000);
+
 
 			return username == "admin" && password == "password";
 		}

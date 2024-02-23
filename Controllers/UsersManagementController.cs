@@ -6,7 +6,7 @@ namespace Tasks_WEB_API.Controllers;
 [ApiController]
 [Area("TasksDocumentation")]
 [Route("api/v1.0/")]
-[Authorize]
+
 public class UsersManagementController : ControllerBase
 {
 	//private readonly IAuthentificationRepository authentification;
@@ -23,6 +23,7 @@ public class UsersManagementController : ControllerBase
 	/// <summary>
 	/// Affiche la liste de tous les utilisateurs
 	/// </summary>
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/GetUsers")]
 	public async Task<ActionResult> GetUsers()
 	{
@@ -35,6 +36,7 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
+	/// [Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/SelectUser/{ID:int}")]
 	public async Task<ActionResult> GetUserById(int ID)
 	{
