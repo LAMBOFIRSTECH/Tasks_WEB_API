@@ -33,6 +33,7 @@ builder.Services.AddSwaggerGen(con =>
 	});
 	var xmlPath = Path.Combine(AppContext.BaseDirectory, "Tasks_WEB_API.xml");
 	con.IncludeXmlComments(xmlPath);
+	
 });
 
 builder.Services.AddCors(options =>
@@ -89,17 +90,17 @@ builder.Services.AddAuthentication("BasicAuthentication")
 // Dans ConfigureServices
 builder.Services.AddAuthorization(options =>
 {
-    // Politique d'autorisation pour les administrateurs
-    options.AddPolicy("AdminPolicy", policy =>
-        policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
-              .RequireAuthenticatedUser() ); // L'utilisateur doit être authentifié
-            //   .AddAuthenticationSchemes("AdminJWT"));  // Utilisation du schéma d'authentification JWT pour cette politique
+	// Politique d'autorisation pour les administrateurs
+	options.AddPolicy("AdminPolicy", policy =>
+		policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
+			  .RequireAuthenticatedUser() ); // L'utilisateur doit être authentifié
+			//   .AddAuthenticationSchemes("AdminJWT"));  // Utilisation du schéma d'authentification JWT pour cette politique
 
-    // Politique d'autorisation pour les utilisateurs non-administrateurs
-    options.AddPolicy("UserPolicy", policy =>
-        policy.RequireRole(nameof(Utilisateur.Privilege.UserX))
-              .RequireAuthenticatedUser()  // L'utilisateur doit être authentifié
-              .AddAuthenticationSchemes("BasicAuthentication"));  // Utilisation du schéma d'authentification de base pour cette politique
+	// Politique d'autorisation pour les utilisateurs non-administrateurs
+	options.AddPolicy("UserPolicy", policy =>
+		policy.RequireRole(nameof(Utilisateur.Privilege.UserX))
+			  .RequireAuthenticatedUser()  // L'utilisateur doit être authentifié
+			  .AddAuthenticationSchemes("BasicAuthentication"));  // Utilisation du schéma d'authentification de base pour cette politique
 });
 
 
@@ -128,6 +129,4 @@ app.UseEndpoints(endpoints =>
 {
 	endpoints.MapControllers();
 });
-
-// app.MapControllers(); Obsolète
 app.Run();

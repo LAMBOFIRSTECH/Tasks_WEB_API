@@ -36,7 +36,7 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
-	/// [Authorize(Policy = "UserPolicy")]
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/SelectUser/{ID:int}")]
 	public async Task<ActionResult> GetUserById(int ID)
 	{

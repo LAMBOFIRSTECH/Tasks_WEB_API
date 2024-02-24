@@ -15,6 +15,9 @@ namespace Tasks_WEB_API.Repositories
 		{
 			var listUtilisateur = await dataBaseMemoryContext.Utilisateurs.ToListAsync();
 			await dataBaseMemoryContext.SaveChangesAsync();
+			
+		
+			
 			return listUtilisateur;
 		}
 		public async Task<Utilisateur> GetUserById(int id)
@@ -27,6 +30,7 @@ namespace Tasks_WEB_API.Repositories
 		{
 			await dataBaseMemoryContext.Utilisateurs.AddAsync(utilisateur);
 			await dataBaseMemoryContext.SaveChangesAsync();
+			
 			return utilisateur;
 		}
 
