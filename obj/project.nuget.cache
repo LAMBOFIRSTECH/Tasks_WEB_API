@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "U+zlEf4Q+wueh6ZnFbRopn9VZKxX8Y+PH12DNu6W9bO2SB3xaBuw+p8HmCchmHRR2KMPJJEh5I+4WXPYy89wfw==",
+  "dgSpecHash": "pBmYHky+fBmpu5S1L7I8riXWKKmRTOSqVoBqBtQAJK3ISATyYbrlTfajsMZW7tZCF71kc2eGzNTQ7fSkmplpww==",
   "success": true,
   "projectFilePath": "/home/lambo-ubuntu/Tasks_WEB_API/Tasks_WEB_API.csproj",
   "expectedPackageFiles": [
+    "/home/lambo-ubuntu/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/castle.core/4.4.0/castle.core.4.4.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.aspnetcore.hosting.abstractions/2.0.3/microsoft.aspnetcore.hosting.abstractions.2.0.3.nupkg.sha512",

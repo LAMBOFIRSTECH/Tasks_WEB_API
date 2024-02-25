@@ -4,7 +4,7 @@ using Tasks_WEB_API.Models;
 
 namespace Tasks_WEB_API.Repositories
 {
-	public class UtilisateurRepository:IReadUsersMethods,IWriteUsersMethods
+	public class UtilisateurRepository : IReadUsersMethods, IWriteUsersMethods
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
 		public UtilisateurRepository(DailyTasksMigrationsContext dataBaseMemoryContext)
@@ -15,9 +15,7 @@ namespace Tasks_WEB_API.Repositories
 		{
 			var listUtilisateur = await dataBaseMemoryContext.Utilisateurs.ToListAsync();
 			await dataBaseMemoryContext.SaveChangesAsync();
-			
-		
-			
+
 			return listUtilisateur;
 		}
 		public async Task<Utilisateur> GetUserById(int id)
@@ -30,7 +28,7 @@ namespace Tasks_WEB_API.Repositories
 		{
 			await dataBaseMemoryContext.Utilisateurs.AddAsync(utilisateur);
 			await dataBaseMemoryContext.SaveChangesAsync();
-			
+
 			return utilisateur;
 		}
 
@@ -47,11 +45,20 @@ namespace Tasks_WEB_API.Repositories
 		public async Task<Utilisateur> UpdateUser(Utilisateur utilisateur)
 		{
 			var user = await dataBaseMemoryContext.Utilisateurs.FindAsync(utilisateur.ID);
-			dataBaseMemoryContext.Utilisateurs.Remove(user);
-			Utilisateur utilisateur1 = new() { ID = utilisateur.ID, Nom = utilisateur.Nom, Pass = utilisateur.Pass, Role = utilisateur.Role };
-			dataBaseMemoryContext.Utilisateurs.Add(utilisateur1);
+
+			//dataBaseMemoryContext.Utilisateurs.Remove(user);
+			user.Nom = utilisateur.Nom;
+			user.Role = utilisateur.Role;
+			if (!string.IsNullOrEmpty(utilisateur.Pass))
+			{
+				user.DefinirMotDePasse(utilisateur.Pass);
+			}
+
+			// Utilisateur utilisateur1 = new() 
+			// { ID = utilisateur.ID, Nom = utilisateur.Nom, Pass = utilisateur.Pass, Role = utilisateur.Role };
+			//dataBaseMemoryContext.Utilisateurs.Add(utilisateur1);
 			await dataBaseMemoryContext.SaveChangesAsync();
-			return utilisateur1;
+			return user;
 		}
 	}
 }

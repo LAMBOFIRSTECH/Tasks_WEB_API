@@ -9,11 +9,10 @@ namespace Tasks_WEB_API.Controllers;
 
 public class UsersManagementController : ControllerBase
 {
-	//private readonly IAuthentificationRepository authentification;
 	private readonly IReadUsersMethods readMethods;
 	private readonly IWriteUsersMethods writeMethods;
 
-	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods)//IAuthentificationRepository authentification, 
+	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods) 
 	{
 		//this.authentification = authentification;
 		this.readMethods = readMethods;
@@ -23,8 +22,8 @@ public class UsersManagementController : ControllerBase
 	/// <summary>
 	/// Affiche la liste de tous les utilisateurs
 	/// </summary>
-	[Authorize(Policy = "UserPolicy")]
-	[HttpGet("~/GetUsers")]
+	//[Authorize(Policy = "UserPolicy")]
+	[HttpGet("~/GetAllUsers")]
 	public async Task<ActionResult> GetUsers()
 	{
 		var users = await readMethods.GetUsers();
@@ -73,9 +72,20 @@ public class UsersManagementController : ControllerBase
 			{
 				return BadRequest("Le rôle spécifié n'est pas valide.");
 			}
-			Utilisateur newUtilisateur = new() { ID = identifiant, Nom = nom, Pass = mdp, Role = privilege };
-			var listUtilisateurs = await readMethods.GetUsers();
-			foreach (var item in listUtilisateurs)
+			//var password = newUtilisateur.DefinirMotDePasse(mdp);
+			
+			Utilisateur newUtilisateur = new()
+			{
+				ID = identifiant,
+				Nom = nom,
+				Role = privilege,
+				Pass = ""
+		};
+		// if (!string.IsNullOrEmpty(newUtilisateur.Pass))
+		// {
+		// }
+		var listUtilisateurs = await readMethods.GetUsers();
+		foreach (var item in listUtilisateurs)
 			{
 				if (item.Nom == nom && item.Role == privilege)
 				{
@@ -132,10 +142,6 @@ public class UsersManagementController : ControllerBase
 			{
 				return NotFound($"Cet utilisateur n'existe plus dans le contexte de base de données");
 			}
-			// if (item.ID == utilisateur.ID)
-			// {
-			// 	await utilisateurRepository.UpdateUser(utilisateur);
-			// }
 			await (item.ID == utilisateur.ID ? writeMethods.UpdateUser(utilisateur) : Task.CompletedTask);
 			return Ok($"Les infos de l'utilisateur [{item.ID}] ont bien été modifiées.");
 		}

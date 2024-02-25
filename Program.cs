@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using Tasks_WEB_API.Repositories;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
-		
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(con =>
@@ -31,9 +32,10 @@ builder.Services.AddSwaggerGen(con =>
 			Url = new Uri("https://example.com/license")
 		}
 	});
-	var xmlPath = Path.Combine(AppContext.BaseDirectory, "Tasks_WEB_API.xml");
-	con.IncludeXmlComments(xmlPath);
-	
+
+	var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+	con.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
 });
 
 builder.Services.AddCors(options =>
@@ -41,8 +43,7 @@ builder.Services.AddCors(options =>
 	options.AddPolicy(name: MyAllowSpecificOrigins,
 					  policy =>
 					  {
-						  policy.WithOrigins("http://localhost:5163",
-											  "https://localhost:7082");
+						  policy.WithOrigins("https://localhost:7082");
 					  });
 });
 
@@ -93,8 +94,8 @@ builder.Services.AddAuthorization(options =>
 	// Politique d'autorisation pour les administrateurs
 	options.AddPolicy("AdminPolicy", policy =>
 		policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
-			  .RequireAuthenticatedUser() ); // L'utilisateur doit être authentifié
-			//   .AddAuthenticationSchemes("AdminJWT"));  // Utilisation du schéma d'authentification JWT pour cette politique
+			  .RequireAuthenticatedUser()); // L'utilisateur doit être authentifié
+											//   .AddAuthenticationSchemes("AdminJWT"));  // Utilisation du schéma d'authentification JWT pour cette politique
 
 	// Politique d'autorisation pour les utilisateurs non-administrateurs
 	options.AddPolicy("UserPolicy", policy =>
@@ -116,11 +117,19 @@ if (app.Environment.IsDevelopment())
 		con.RoutePrefix = string.Empty;
 	});
 }
+else if (app.Environment.IsProduction())
+{
+
+	// Gérer les erreurs dans un environnement de production
+	app.UseExceptionHandler("/Error");
+	app.UseHsts();
+
+}
 
 app.UseCors(MyAllowSpecificOrigins);
 var rewriteOptions = new RewriteOptions()
 	.AddRewrite(@"^www\.taskmoniroting/Taskmanagement", "https://localhost:7082/index.html", true);
-
+app.UseHttpsRedirection();
 app.UseRewriter(rewriteOptions);
 app.UseRouting();
 app.UseAuthentication();
