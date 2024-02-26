@@ -12,7 +12,7 @@ public class UsersManagementController : ControllerBase
 	private readonly IReadUsersMethods readMethods;
 	private readonly IWriteUsersMethods writeMethods;
 
-	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods) 
+	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods)
 	{
 		//this.authentification = authentification;
 		this.readMethods = readMethods;
@@ -22,7 +22,7 @@ public class UsersManagementController : ControllerBase
 	/// <summary>
 	/// Affiche la liste de tous les utilisateurs
 	/// </summary>
-	//[Authorize(Policy = "UserPolicy")]
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/GetAllUsers")]
 	public async Task<ActionResult> GetUsers()
 	{
@@ -35,7 +35,7 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
-	[Authorize(Policy = "UserPolicy")]
+	//[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/SelectUser/{ID:int}")]
 	public async Task<ActionResult> GetUserById(int ID)
 	{
@@ -72,28 +72,26 @@ public class UsersManagementController : ControllerBase
 			{
 				return BadRequest("Le rôle spécifié n'est pas valide.");
 			}
-			//var password = newUtilisateur.DefinirMotDePasse(mdp);
-			
+
 			Utilisateur newUtilisateur = new()
 			{
 				ID = identifiant,
 				Nom = nom,
-				Role = privilege,
-				Pass = ""
-		};
-		// if (!string.IsNullOrEmpty(newUtilisateur.Pass))
-		// {
-		// }
-		var listUtilisateurs = await readMethods.GetUsers();
-		foreach (var item in listUtilisateurs)
+				Pass = mdp,
+				Role = privilege
+			};
+
+			var listUtilisateurs = await readMethods.GetUsers();
+			foreach (var item in listUtilisateurs)
 			{
 				if (item.Nom == nom && item.Role == privilege)
 				{
 					return Conflict("Cet utilisateur est déjà présent");
 				}
 			}
-			
+
 			await writeMethods.CreateUser(newUtilisateur);
+
 			return Ok("La ressource a bien été créée");
 		}
 		catch (Exception)

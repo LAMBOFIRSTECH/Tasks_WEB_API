@@ -30,16 +30,21 @@ public class Utilisateur
 	[Required]
 	[XmlIgnore] // Ignorer dans la documentation XML
 	[JsonIgnore] // Ignorer dans la sérialisation JSON
-	private string? _pass { get; set; }
-	
-	public string DefinirMotDePasse(string password)
-	{
-		_pass = BCrypt.Net.BCrypt.HashPassword(password);
-		return _pass;
-	}
+				
+
+	public string Pass { get; set; }
 	public bool VerifierMotDePasse(string password)
 	{
-		return BCrypt.Net.BCrypt.Verify(password, _pass);
+		return BCrypt.Net.BCrypt.Verify(password, Pass);
 	}
-	public string? Pass => _pass;
+
+	public string DefinirMotDePasse(string password)
+	{
+		if (!string.IsNullOrEmpty(password))
+		{
+			Pass = BCrypt.Net.BCrypt.HashPassword(password);
+		}
+		return Pass;
+	}
+
 }

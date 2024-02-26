@@ -26,8 +26,25 @@ namespace Tasks_WEB_API.Repositories
 
 		public async Task<Utilisateur> CreateUser(Utilisateur utilisateur)
 		{
-			await dataBaseMemoryContext.Utilisateurs.AddAsync(utilisateur);
-			await dataBaseMemoryContext.SaveChangesAsync();
+
+			var password = utilisateur.Pass;
+			if (!string.IsNullOrEmpty(password))
+			{
+				utilisateur.DefinirMotDePasse(password);
+			}
+
+			var check = utilisateur.VerifierMotDePasse(password);
+
+			if (check)
+			{
+				await dataBaseMemoryContext.Utilisateurs.AddAsync(utilisateur);
+				await dataBaseMemoryContext.SaveChangesAsync();
+			}
+			else
+			{
+				
+				throw new Exception("fake password");
+			}
 
 			return utilisateur;
 		}
@@ -46,17 +63,17 @@ namespace Tasks_WEB_API.Repositories
 		{
 			var user = await dataBaseMemoryContext.Utilisateurs.FindAsync(utilisateur.ID);
 
-			//dataBaseMemoryContext.Utilisateurs.Remove(user);
-			user.Nom = utilisateur.Nom;
-			user.Role = utilisateur.Role;
-			if (!string.IsNullOrEmpty(utilisateur.Pass))
-			{
-				user.DefinirMotDePasse(utilisateur.Pass);
-			}
+			dataBaseMemoryContext.Utilisateurs.Remove(user);
+			// user.Nom = utilisateur.Nom;
+			// user.Role = utilisateur.Role;
+			// if (!string.IsNullOrEmpty(utilisateur.Pass))
+			// {
+			// 	user.DefinirMotDePasse(utilisateur.Pass);
+			// }
 
-			// Utilisateur utilisateur1 = new() 
-			// { ID = utilisateur.ID, Nom = utilisateur.Nom, Pass = utilisateur.Pass, Role = utilisateur.Role };
-			//dataBaseMemoryContext.Utilisateurs.Add(utilisateur1);
+			Utilisateur utilisateur1 = new() 
+			{ ID = utilisateur.ID, Nom = utilisateur.Nom, Pass = utilisateur.Pass, Role = utilisateur.Role };
+			dataBaseMemoryContext.Utilisateurs.Add(utilisateur1);
 			await dataBaseMemoryContext.SaveChangesAsync();
 			return user;
 		}

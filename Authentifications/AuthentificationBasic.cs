@@ -7,7 +7,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 namespace Tasks_WEB_API.Repositories
 {
-    public class AuthentificationBasic : AuthenticationHandler<AuthenticationSchemeOptions>
+	public class AuthentificationBasic : AuthenticationHandler<AuthenticationSchemeOptions>
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
 		public AuthentificationBasic(DailyTasksMigrationsContext dataBaseMemoryContext, IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -68,11 +68,15 @@ namespace Tasks_WEB_API.Repositories
 
 		private async Task<bool> IsValidCredentials(string username, string password)
 		{
-			var login_username = dataBaseMemoryContext.Utilisateurs.Select(u => u.Nom).SingleOrDefault();
-			var login_password = dataBaseMemoryContext.Utilisateurs.Select(u=> u.Pass).SingleOrDefault();
+			var utilisateur = dataBaseMemoryContext.Utilisateurs.FirstOrDefault(u => u.Nom == username);
 
+			if (utilisateur != null)
+			{
+				return utilisateur.VerifierMotDePasse(password);
+			}
 			await Task.Delay(1000);
-			return login_username==username && login_password==password;
+
+			return false;
 		}
 	}
 }
