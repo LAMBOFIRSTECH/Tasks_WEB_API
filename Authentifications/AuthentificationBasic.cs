@@ -65,17 +65,14 @@ namespace Tasks_WEB_API.Repositories
 				return AuthenticateResult.Fail($"Authentication failed: {ex.Message}");
 			}
 		}
-
 		private async Task<bool> IsValidCredentials(string username, string password)
 		{
 			var utilisateur = dataBaseMemoryContext.Utilisateurs.FirstOrDefault(u => u.Nom == username);
-
 			if (utilisateur != null)
 			{
-				return utilisateur.VerifierMotDePasse(password);
+				return utilisateur.ChechHashPassword(password);
 			}
 			await Task.Delay(1000);
-
 			return false;
 		}
 	}

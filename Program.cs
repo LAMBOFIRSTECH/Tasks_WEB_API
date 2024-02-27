@@ -11,7 +11,6 @@ using Tasks_WEB_API.Repositories;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(con =>
@@ -63,47 +62,37 @@ builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("BasicAuthentication")
 	.AddScheme<AuthenticationSchemeOptions, AuthentificationBasic>("BasicAuthentication", options => { });
 
-// builder.Services.AddAuthentication("JwtAuthentication")
-// 	.AddScheme<AuthenticationSchemeOptions, AuthentificationJwt>("JwtAuthentication", options => { });
+builder.Services.AddAuthentication("JwtAuthentication")
+	.AddScheme<AuthenticationSchemeOptions, AuthentificationJwt>("JwtAuthentication", options => {
+		// var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<SecretKey>();
+		// var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
 
-
-//--------------------------------------
-
-// Configuration de l'authentification par JWT pour les administrateurs
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-// 	.AddJwtBearer("AdminJWT", options =>
-// 	{
-// 		// Configuration des paramètres JWT
-// 		var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-// 		var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
-
-// 		options.TokenValidationParameters = new TokenValidationParameters
-// 		{
-// 			ValidateIssuerSigningKey = true,
-// 			IssuerSigningKey = new SymmetricSecurityKey(key),
-// 			ValidateIssuer = false,
-// 			ValidateAudience = false
-// 		};
-// 	});
+		// options.TokenValidationParameters = new TokenValidationParameters
+		// {
+		// 	ValidateIssuerSigningKey = true,
+		// 	IssuerSigningKey = new SymmetricSecurityKey(key),
+		// 	ValidateIssuer = false,
+		// 	ValidateAudience = false
+		// };
+	 });
 
 
 
-// Dans ConfigureServices
 builder.Services.AddAuthorization(options =>
 {
 	// Politique d'autorisation pour les administrateurs
 	options.AddPolicy("AdminPolicy", policy =>
 		policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
-			  .RequireAuthenticatedUser()); // L'utilisateur doit être authentifié
-											//   .AddAuthenticationSchemes("AdminJWT"));  // Utilisation du schéma d'authentification JWT pour cette politique
+			  .RequireAuthenticatedUser()
+			  .AddAuthenticationSchemes("JwtAuthentication"));
+											//   .(""));  // Utilisation du schéma d'authentification JWT pour cette politique
 
 	// Politique d'autorisation pour les utilisateurs non-administrateurs
 	options.AddPolicy("UserPolicy", policy =>
 		policy.RequireRole(nameof(Utilisateur.Privilege.UserX))
 			  .RequireAuthenticatedUser()  // L'utilisateur doit être authentifié
-			  .AddAuthenticationSchemes("BasicAuthentication"));  // Utilisation du schéma d'authentification de base pour cette politique
+			  .AddAuthenticationSchemes("BasicAuthentication"));// Utilisation du schéma d'authentification de base pour cette politique
 });
-
 
 var app = builder.Build();
 

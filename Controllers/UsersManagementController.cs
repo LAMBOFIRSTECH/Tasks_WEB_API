@@ -14,13 +14,12 @@ public class UsersManagementController : ControllerBase
 
 	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods)
 	{
-		//this.authentification = authentification;
 		this.readMethods = readMethods;
 		this.writeMethods = writeMethods;
 	}
 
 	/// <summary>
-	/// Affiche la liste de tous les utilisateurs
+	/// Affiche la liste de tous les utilisateurs.
 	/// </summary>
 	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/GetAllUsers")]
@@ -31,11 +30,11 @@ public class UsersManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Affiche les informations sur un utilisateur
+	/// Affiche les informations sur un utilisateur.
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
-	//[Authorize(Policy = "UserPolicy")]
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/SelectUser/{ID:int}")]
 	public async Task<ActionResult> GetUserById(int ID)
 	{
@@ -55,7 +54,7 @@ public class UsersManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Créée un utilisateur
+	/// Créée un utilisateur.
 	/// </summary>
 	/// <param name="identifiant"></param>
 	/// <param name="nom"></param>
@@ -101,7 +100,7 @@ public class UsersManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Supprime un utilisateur
+	/// Supprime un utilisateur en fonction de son identifiant.
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
@@ -126,7 +125,7 @@ public class UsersManagementController : ControllerBase
 	}
 
 	/// <summary>
-	///  Met à jour les informations d'un utilisateur
+	///  Met à jour les informations d'un utilisateur.
 	/// </summary>
 	/// <param name="utilisateur"></param>
 	/// <returns></returns>

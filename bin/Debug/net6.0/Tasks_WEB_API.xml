@@ -12,7 +12,6 @@
         </member>
         <member name="M:Tasks_WEB_API.Repositories.TacheRepository.GetTaskById(System.Nullable{System.Int32})">
             <summary>
-            Récupère une tache en fonction de son matricule depuis le contexte de base de données
             Renvoie une tache spécifique en fonction de son matricule
             </summary>
             <param name="matricule"></param>
@@ -100,7 +99,7 @@
         </member>
         <member name="T:Tasks_WEB_API.Utilisateur">
             <summary>
-            Représente un utilisateur dans le système
+            Représente un utilisateur dans le système.
             </summary>
         </member>
         <member name="P:Tasks_WEB_API.Utilisateur.ID">

@@ -23,7 +23,6 @@ namespace Tasks_WEB_API.Repositories
 		}
 
 		/// <summary>
-		/// Récupère une tache en fonction de son matricule depuis le contexte de base de données
 		/// Renvoie une tache spécifique en fonction de son matricule
 		/// </summary>
 		/// <param name="matricule"></param>
@@ -71,6 +70,5 @@ namespace Tasks_WEB_API.Repositories
 			await dataBaseMemoryContext.SaveChangesAsync();
 			return newtache;
 		}
-
 	}
 }

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Tasks_WEB_API;
 /// <summary>
-/// Représente un utilisateur dans le système
+/// Représente un utilisateur dans le système.
 /// </summary>
 public class Utilisateur
 {
@@ -26,19 +26,16 @@ public class Utilisateur
 	[Column(TypeName = "nvarchar(24)")]
 	[Required]
 	public Privilege Role { get; set; }
-	//[NotMapped] // Ce champ ne sera pas mappé dans la base de données
 	[Required]
 	[XmlIgnore] // Ignorer dans la documentation XML
-	[JsonIgnore] // Ignorer dans la sérialisation JSON
-				
-
+	[JsonIgnore] // Ignorer dans la sérialisation JSON		
 	public string Pass { get; set; }
-	public bool VerifierMotDePasse(string password)
+	public bool ChechHashPassword(string password)
 	{
 		return BCrypt.Net.BCrypt.Verify(password, Pass);
 	}
 
-	public string DefinirMotDePasse(string password)
+	public string SetHashPassword(string password)
 	{
 		if (!string.IsNullOrEmpty(password))
 		{

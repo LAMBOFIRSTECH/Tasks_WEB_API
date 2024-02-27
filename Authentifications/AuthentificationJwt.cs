@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Tasks_WEB_API.Repositories
 {
-	public class AuthentificationJwt : AuthenticationHandler<AuthenticationSchemeOptions>, IAuthorizationFilter
+	public class AuthentificationJwt : AuthenticationHandler<AuthenticationSchemeOptions>
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
 		public AuthentificationJwt(DailyTasksMigrationsContext dataBaseMemoryContext, IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -25,18 +25,37 @@ namespace Tasks_WEB_API.Repositories
 		{
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
 		}
-
-		public void OnAuthorization(AuthorizationFilterContext context)
+		protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
 		{
-			throw new NotImplementedException();
+
+			if (!Request.Headers.ContainsKey("Authorization"))
+				return AuthenticateResult.Fail("Authorization header missing");
+
+			try
+			{
+				var username = "";
+				var password = "";
+				if (await IsValidCredentials(username, password))
+
+				{
+					return AuthenticateResult.NoResult();//pb
+				}
+				return AuthenticateResult.NoResult();//pb
+			}
+			catch (Exception ex)
+			{
+				return AuthenticateResult.Fail($"Authentication failed: {ex.Message}");
+			}
 		}
-
-        protected override Task<AuthenticateResult> HandleAuthenticateAsync()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
+		private async Task<bool> IsValidCredentials(string username, string password)
+		{
+			var utilisateur = dataBaseMemoryContext.Utilisateurs.FirstOrDefault(u => u.Nom == username);
+			if (utilisateur != null)
+			{
+				return utilisateur.ChechHashPassword(password);
+			}
+			await Task.Delay(1000);
+			return false;
+		}
+	}
 }
-
