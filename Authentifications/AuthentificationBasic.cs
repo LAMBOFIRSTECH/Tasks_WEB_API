@@ -17,6 +17,7 @@ namespace Tasks_WEB_API.Repositories
 		: base(options, logger, encoder, clock)
 		{
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
+			
 		}
 		protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
 		{
@@ -28,11 +29,10 @@ namespace Tasks_WEB_API.Repositories
 				var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
 				if (authHeader.Scheme.Equals("Basic", StringComparison.OrdinalIgnoreCase))
 				{
-					var credentialBytes = Convert.FromBase64String(authHeader.Parameter);//header du token
+					var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
 					var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
 					var username = credentials[0];
 					var password = credentials[1];
-					// On va implémenter la logique d'authentification ici
 					if (await IsValidCredentials(username, password))
 					{
 						// Créer un ClaimsPrincipal avec le nom et le privilege de l'utilisateur playload du token
@@ -44,7 +44,6 @@ namespace Tasks_WEB_API.Repositories
 
 						var identity = new ClaimsIdentity(claims, Scheme.Name);
 						var principal = new ClaimsPrincipal(identity);
-
 						// Assigner le principal à la propriété Principal de l'objet context
 						var ticket = new AuthenticationTicket(principal, Scheme.Name);//signature header http --> Authorization: Basic am9objpwYXNzd29yZA==
 

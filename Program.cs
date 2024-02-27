@@ -1,7 +1,11 @@
 using System.Reflection;
+using System.Text;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Tasks_WEB_API;
 using Tasks_WEB_API.Interfaces;
@@ -9,6 +13,7 @@ using Tasks_WEB_API.Models;
 using Tasks_WEB_API.Repositories;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var key = new RandomUserSecret().GenerateRandomKey(64);
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -63,36 +68,24 @@ builder.Services.AddAuthentication("BasicAuthentication")
 	.AddScheme<AuthenticationSchemeOptions, AuthentificationBasic>("BasicAuthentication", options => { });
 
 builder.Services.AddAuthentication("JwtAuthentication")
-	.AddScheme<AuthenticationSchemeOptions, AuthentificationJwt>("JwtAuthentication", options => {
-		// var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<SecretKey>();
-		// var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
-
-		// options.TokenValidationParameters = new TokenValidationParameters
-		// {
-		// 	ValidateIssuerSigningKey = true,
-		// 	IssuerSigningKey = new SymmetricSecurityKey(key),
-		// 	ValidateIssuer = false,
-		// 	ValidateAudience = false
-		// };
-	 });
-
+	.AddScheme<AuthenticationSchemeOptions, AuthentificationJwt>("JwtAuthentication", options =>{});
 
 
 builder.Services.AddAuthorization(options =>
-{
-	// Politique d'autorisation pour les administrateurs
-	options.AddPolicy("AdminPolicy", policy =>
-		policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
-			  .RequireAuthenticatedUser()
-			  .AddAuthenticationSchemes("JwtAuthentication"));
-											//   .(""));  // Utilisation du schéma d'authentification JWT pour cette politique
+ {
+	 // Politique d'autorisation pour les administrateurs
+	 options.AddPolicy("AdminPolicy", policy =>
+		 policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
+			   .RequireAuthenticatedUser()
+			   .AddAuthenticationSchemes("JwtAuthentication"));
 
-	// Politique d'autorisation pour les utilisateurs non-administrateurs
-	options.AddPolicy("UserPolicy", policy =>
-		policy.RequireRole(nameof(Utilisateur.Privilege.UserX))
-			  .RequireAuthenticatedUser()  // L'utilisateur doit être authentifié
-			  .AddAuthenticationSchemes("BasicAuthentication"));// Utilisation du schéma d'authentification de base pour cette politique
-});
+
+	 // Politique d'autorisation pour les utilisateurs non-administrateurs
+	 options.AddPolicy("UserPolicy", policy =>
+		 policy.RequireRole(nameof(Utilisateur.Privilege.UserX))
+			   .RequireAuthenticatedUser()  // L'utilisateur doit être authentifié
+			   .AddAuthenticationSchemes("BasicAuthentication"));
+ });
 
 var app = builder.Build();
 
@@ -100,11 +93,11 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI(con =>
-	{
-		con.SwaggerEndpoint("/swagger/1.0/swagger.json", "Daily Tasks Management API");
+	 {
+		 con.SwaggerEndpoint("/swagger/1.0/swagger.json", "Daily Tasks Management API");
 
-		con.RoutePrefix = string.Empty;
-	});
+		 con.RoutePrefix = string.Empty;
+	 });
 }
 else if (app.Environment.IsProduction())
 {
@@ -117,14 +110,14 @@ else if (app.Environment.IsProduction())
 
 app.UseCors(MyAllowSpecificOrigins);
 var rewriteOptions = new RewriteOptions()
-	.AddRewrite(@"^www\.taskmoniroting/Taskmanagement", "https://localhost:7082/index.html", true);
+	 .AddRewrite(@"^www\.taskmoniroting/Taskmanagement", "https://localhost:7082/index.html", true);
 app.UseHttpsRedirection();
 app.UseRewriter(rewriteOptions);
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
-{
-	endpoints.MapControllers();
-});
+ {
+	 endpoints.MapControllers();
+ });
 app.Run();

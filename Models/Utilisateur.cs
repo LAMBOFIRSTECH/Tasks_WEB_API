@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using BCrypt.Net;
 
 namespace Tasks_WEB_API;
 /// <summary>
@@ -29,13 +30,13 @@ public class Utilisateur
 	[Required]
 	[XmlIgnore] // Ignorer dans la documentation XML
 	[JsonIgnore] // Ignorer dans la sérialisation JSON		
-	public string Pass { get; set; }
-	public bool ChechHashPassword(string password)
+	public string? Pass { get; set; }
+	public bool ChechHashPassword(string? password)
 	{
 		return BCrypt.Net.BCrypt.Verify(password, Pass);
 	}
 
-	public string SetHashPassword(string password)
+	public string SetHashPassword(string? password)
 	{
 		if (!string.IsNullOrEmpty(password))
 		{

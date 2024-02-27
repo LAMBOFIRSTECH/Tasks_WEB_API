@@ -4,7 +4,6 @@ using Tasks_WEB_API.Interfaces;
 namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
-[Area("TasksDocumentation")]
 [Route("api/v1.0/")]
 
 public class UsersManagementController : ControllerBase
