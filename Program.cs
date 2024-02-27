@@ -1,11 +1,7 @@
 using System.Reflection;
-using System.Text;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Tasks_WEB_API;
 using Tasks_WEB_API.Interfaces;
@@ -13,7 +9,6 @@ using Tasks_WEB_API.Models;
 using Tasks_WEB_API.Repositories;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var key = new RandomUserSecret().GenerateRandomKey(64);
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -67,9 +62,6 @@ builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("BasicAuthentication")
 	.AddScheme<AuthenticationSchemeOptions, AuthentificationBasic>("BasicAuthentication", options => { });
 
-builder.Services.AddAuthentication("JwtAuthentication")
-	.AddScheme<AuthenticationSchemeOptions, AuthentificationJwt>("JwtAuthentication", options =>{});
-
 
 builder.Services.AddAuthorization(options =>
  {
@@ -77,7 +69,7 @@ builder.Services.AddAuthorization(options =>
 	 options.AddPolicy("AdminPolicy", policy =>
 		 policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
 			   .RequireAuthenticatedUser()
-			   .AddAuthenticationSchemes("JwtAuthentication"));
+			   .AddAuthenticationSchemes("BasicAuthentication"));
 
 
 	 // Politique d'autorisation pour les utilisateurs non-administrateurs
