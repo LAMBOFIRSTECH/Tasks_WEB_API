@@ -62,7 +62,7 @@ public class UsersManagementController : ControllerBase
 	/// <returns></returns>
 	[HttpPost("~/CreateUser/")]
 	public async Task<IActionResult> CreateUser(int identifiant, string nom, string mdp, string role)
-	{
+	{		
 		try
 		{
 			Utilisateur.Privilege privilege;
