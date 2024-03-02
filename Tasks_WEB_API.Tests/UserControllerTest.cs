@@ -15,7 +15,7 @@ namespace Tasks_WEB_API.Tests
 		Mock<IWriteUsersMethods>  mockWriteMethods2 = new Mock<IWriteUsersMethods>();
 		
 		[Fact]
-		public async Task GetUsers_Returns_OkResult_1()
+		public async Task GetUsersReturns_OkResult_1()
 		{
 			// Arrange
 			var expectedUserList = new List<Utilisateur>();
@@ -32,7 +32,7 @@ namespace Tasks_WEB_API.Tests
 		}
 
 		[Fact]
-		public async Task GetUsersById_Returns_NotFound_or_OkResult_2()
+		public async Task GetUsersByIdReturns_NotFound_or_OkResult_2()
 		{
 			// Arrange
 			mockReadMethods.SetupSequence(m => m.GetUserById(userID))
