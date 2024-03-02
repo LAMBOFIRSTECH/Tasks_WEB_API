@@ -107,11 +107,5 @@
             Représente l'identifiant unique d'un utilisateur.
             </summary>
         </member>
-        <member name="M:Tasks_WEB_API.Tests.UserControllerTest.CreateUser_Returns_BadRequest_or_Returns_ConflictForIdenticUsername_Privilege">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
     </members>
 </doc>
