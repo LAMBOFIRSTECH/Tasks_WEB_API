@@ -6,7 +6,7 @@ namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
 //[Area("TasksDocumentation")]
-[Route("[Controller]")]
+[Route("api/v1.0/")]
 
 public class TasksManagementController : ControllerBase
 {
@@ -99,7 +99,7 @@ public class TasksManagementController : ControllerBase
 	/// <param name="Matricule"></param>
 	/// <returns></returns>
 	[HttpDelete("~/DeleteTask/{Matricule:int}")]
-	public async Task<IActionResult> DeleteUser(int Matricule)
+	public async Task<IActionResult> DeleteTaskById(int Matricule)
 	{
 		var tache = await readMethods.GetTaskById(Matricule);
 		try

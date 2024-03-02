@@ -37,7 +37,7 @@
             <param name="tache"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.DeleteUser(System.Int32)">
+        <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.DeleteTaskById(System.Int32)">
             <summary>
             Supprime une tache
             </summary>

@@ -54,14 +54,13 @@ builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
 	opt.UseInMemoryDatabase(conStrings);
 });
 
-builder.Services.AddScoped<IReadUsersMethods, UtilisateurRepository>();
+builder.Services.AddScoped<IReadUsersMethods,  UtilisateurRepository>();
 builder.Services.AddScoped<IWriteUsersMethods, UtilisateurRepository>();
-builder.Services.AddScoped<IReadTasksMethods, TacheRepository>();
+builder.Services.AddScoped<IReadTasksMethods,  TacheRepository>();
 builder.Services.AddScoped<IWriteTasksMethods, TacheRepository>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("BasicAuthentication")
 	.AddScheme<AuthenticationSchemeOptions, AuthentificationBasic>("BasicAuthentication", options => { });
-
 
 builder.Services.AddAuthorization(options =>
  {

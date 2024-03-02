@@ -114,7 +114,6 @@ namespace Tasks_WEB_API.Tests
 		public async Task UpdateUserReturns_NotFound_or_OkUpdating_5()
 		{
 			//Arrange
-
 			var user1 = new Utilisateur() { ID = 1, Nom = "nom", Pass = "password", Role = Utilisateur.Privilege.UserX };
 			var user2 = new Utilisateur() { ID = 2, Nom = "nom", Pass = "password", Role = Utilisateur.Privilege.Admin };
 
