@@ -89,7 +89,7 @@ public class TasksManagementController : ControllerBase
 		}
 		catch (Exception)
 		{
-			return StatusCode(StatusCodes.Status500InternalServerError, "Erreur lors de la création de la ressource");
+			return StatusCode(StatusCodes.Status500InternalServerError, "Erreur lors de la création de la ressource tache.");
 		}
 	}
 
