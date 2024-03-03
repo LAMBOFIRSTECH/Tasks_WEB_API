@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -11,7 +7,7 @@ using Xunit;
 
 namespace Tasks_WEB_API.Tests
 {
-	public class TaskControllerTest
+    public class TaskControllerTest
 	{
 		const int matricule = 1;
 		Mock<IReadTasksMethods> mockReadMethods = new Mock<IReadTasksMethods>();

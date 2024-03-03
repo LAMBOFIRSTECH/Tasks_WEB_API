@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Tasks_WEB_API.Interfaces;
 namespace Tasks_WEB_API.Controllers;
 
