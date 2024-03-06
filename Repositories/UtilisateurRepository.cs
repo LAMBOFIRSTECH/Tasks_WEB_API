@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
-
 namespace Tasks_WEB_API.Repositories
 {
 	public class UtilisateurRepository : IReadUsersMethods, IWriteUsersMethods
@@ -59,7 +58,7 @@ namespace Tasks_WEB_API.Repositories
 			var user = await dataBaseMemoryContext.Utilisateurs.FindAsync(utilisateur.ID);
 			dataBaseMemoryContext.Utilisateurs.Remove(user);
 			Utilisateur utilisateur1 = new()
-			{ ID = utilisateur.ID, Nom = utilisateur.Nom, Pass = utilisateur.Pass, Role = utilisateur.Role };
+			{ ID = utilisateur.ID, Nom = utilisateur.Nom, Pass = utilisateur.Pass, Role = utilisateur.Role ,Email=utilisateur.Email};
 			var password = utilisateur1.Pass;
 			if (!string.IsNullOrEmpty(password))
 			{

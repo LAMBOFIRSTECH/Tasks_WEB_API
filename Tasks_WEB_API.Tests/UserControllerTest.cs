@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Tasks_WEB_API.Tests
 {
-	public class UserControllerTest
+    public class UserControllerTest
 	{
 		const int userID = 1;
 		Mock<IReadUsersMethods>  mockReadMethods = new Mock<IReadUsersMethods>();
@@ -36,7 +36,7 @@ namespace Tasks_WEB_API.Tests
 		{
 			// Arrange
 			mockReadMethods.SetupSequence(m => m.GetUserById(userID))
-			.ReturnsAsync(new Utilisateur() { ID = userID, Nom = "nom", Pass = "password", Role = Utilisateur.Privilege.UserX })
+			.ReturnsAsync(new Utilisateur() { ID = userID, Nom = "nom", Pass = "password", Role = Utilisateur.Privilege.UserX ,Email="toto@gmail.com"})
 			.ReturnsAsync((Utilisateur)null!);
 
 			var controller = new UsersManagementController(mockReadMethods.Object, null!);
@@ -62,7 +62,8 @@ namespace Tasks_WEB_API.Tests
 				ID = 1,
 				Nom = "nom",
 				Pass = "pass",
-				Role = Utilisateur.Privilege.Admin
+				Role = Utilisateur.Privilege.Admin, 
+				Email="toto@gmail.com"
 			};
 
 			var users = new List<Utilisateur> { user };
@@ -74,9 +75,9 @@ namespace Tasks_WEB_API.Tests
 			var controller2 = new UsersManagementController(mockReadMethods.Object, mockWriteMethods2.Object);
 
 			// Act
-			var result1 = await controller1.CreateUser(2, "nom", "password", "Excepted Admin/UserX");
-			var result2 = await controller2.CreateUser(3, "nom", "password", "Admin");
-			var result3 = await controller2.CreateUser(4, "nom", "password", "UserX");
+			var result1 = await controller1.CreateUser(2, "nom", "password", "Excepted Admin/UserX","toto@gmail.com");
+			var result2 = await controller2.CreateUser(3, "nom", "password", "Admin","toto@gmail.com");
+			var result3 = await controller2.CreateUser(4, "nom", "password", "UserX","toto@gmail.com");
 
 			//Assert
 			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result1);
@@ -114,8 +115,8 @@ namespace Tasks_WEB_API.Tests
 		public async Task UpdateUserReturns_NotFound_or_OkUpdating_5()
 		{
 			//Arrange
-			var user1 = new Utilisateur() { ID = 1, Nom = "nom", Pass = "password", Role = Utilisateur.Privilege.UserX };
-			var user2 = new Utilisateur() { ID = 2, Nom = "nom", Pass = "password", Role = Utilisateur.Privilege.Admin };
+			var user1 = new Utilisateur() { ID = 1, Nom = "nom", Pass = "password", Role = Utilisateur.Privilege.UserX ,Email="toto@gmail.com"};
+			var user2 = new Utilisateur() { ID = 2, Nom = "nom", Pass = "password", Role = Utilisateur.Privilege.Admin ,Email="titi@gmail.com"};
 
 			mockReadMethods.SetupSequence(m => m.GetUserById(userID))
 			.ReturnsAsync(new Utilisateur() { ID = userID })

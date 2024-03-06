@@ -11,16 +11,13 @@ public class UsersManagementController : ControllerBase
 	private readonly IReadUsersMethods readMethods;
 	private readonly IWriteUsersMethods writeMethods;
 
-	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods)
-	{
-		this.readMethods = readMethods;
-		this.writeMethods = writeMethods;
-	}
+	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods){ this.readMethods = readMethods; this.writeMethods = writeMethods; }
 
 	/// <summary>
 	/// Affiche la liste de tous les utilisateurs.
 	/// </summary>
-	[Authorize(Policy = "UserPolicy")]
+	//[Authorize(Policy = "AdminPolicy")]
+	[Authorize]
 	[HttpGet("~/GetAllUsers")]
 	public async Task<ActionResult> GetUsers()
 	{
@@ -33,7 +30,7 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
-	[Authorize(Policy = "UserPolicy")]
+	//[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/SelectUser/{ID:int}")]
 	public async Task<ActionResult> GetUserById(int ID)
 	{
@@ -59,10 +56,11 @@ public class UsersManagementController : ControllerBase
 	/// <param name="nom"></param>
 	/// <param name="mdp"></param>
 	/// <param name="role"></param>
+	/// <param name="email"></param>
 	/// <returns></returns>
 	[HttpPost("~/CreateUser/")]
-	public async Task<IActionResult> CreateUser(int identifiant, string nom, string mdp, string role)
-	{		
+	public async Task<IActionResult> CreateUser(int identifiant, string nom, string mdp, string role, string email)
+	{
 		try
 		{
 			Utilisateur.Privilege privilege;
@@ -76,7 +74,8 @@ public class UsersManagementController : ControllerBase
 				ID = identifiant,
 				Nom = nom,
 				Pass = mdp,
-				Role = privilege
+				Role = privilege,
+				Email = email
 			};
 
 			var listUtilisateurs = await readMethods.GetUsers();
@@ -124,7 +123,7 @@ public class UsersManagementController : ControllerBase
 	}
 
 	/// <summary>
-	///  Met à jour les informations d'un utilisateur.
+	/// Met à jour les informations d'un utilisateur.
 	/// </summary>
 	/// <param name="utilisateur"></param>
 	/// <returns></returns>

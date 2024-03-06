@@ -2,8 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using BCrypt.Net;
-
 namespace Tasks_WEB_API;
 /// <summary>
 /// Représente un utilisateur dans le système.
@@ -17,6 +15,10 @@ public class Utilisateur
 	[Required]
 	public int ID { get; set; }
 	public string? Nom { get; set; }
+	[Required(ErrorMessage="Le format d'adresse doit etre comme l'exemple suivant : <adress_name>@<mailing_server>.<domain>")]
+	[DataType(DataType.EmailAddress)]
+	[EmailAddress]
+	public string Email { get; set; }
 	public enum Privilege
 	{
 		Admin,
@@ -38,9 +40,10 @@ public class Utilisateur
 
 	public string SetHashPassword(string? password)
 	{
+
 		if (!string.IsNullOrEmpty(password))
 		{
-			Pass = BCrypt.Net.BCrypt.HashPassword(password);
+			Pass = BCrypt.Net.BCrypt.HashPassword($"{password}" + "");
 		}
 		return Pass;
 	}

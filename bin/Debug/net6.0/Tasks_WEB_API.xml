@@ -63,7 +63,7 @@
             <param name="ID"></param>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.CreateUser(System.Int32,System.String,System.String,System.String)">
+        <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.CreateUser(System.Int32,System.String,System.String,System.String,System.String)">
             <summary>
             Créée un utilisateur.
             </summary>
@@ -71,6 +71,7 @@
             <param name="nom"></param>
             <param name="mdp"></param>
             <param name="role"></param>
+            <param name="email"></param>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.DeleteUserById(System.Int32)">
@@ -82,7 +83,7 @@
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.UpdateUser(Tasks_WEB_API.Utilisateur)">
             <summary>
-             Met à jour les informations d'un utilisateur.
+            Met à jour les informations d'un utilisateur.
             </summary>
             <param name="utilisateur"></param>
             <returns></returns>

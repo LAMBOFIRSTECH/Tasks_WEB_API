@@ -16,7 +16,6 @@ public class DailyTasksMigrationsContext : DbContext
 		modelBuilder.Entity<Tache>()
 		.Property(t => t.TasksDate)
 		.HasColumnName("DateH");
-		// modelBuilder.Entity<Utilisateur>().HasKey(u => u.ID);
 		base.OnModelCreating(modelBuilder);
 	}
 }

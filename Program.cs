@@ -4,9 +4,14 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Tasks_WEB_API;
+using Tasks_WEB_API.Authentifications;
 using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
 using Tasks_WEB_API.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -42,7 +47,7 @@ builder.Services.AddCors(options =>
 	options.AddPolicy(name: MyAllowSpecificOrigins,
 					  policy =>
 					  {
-						  policy.WithOrigins("https://localhost:7082");
+						  policy.WithOrigins("https://localhost:7082","http://lambo.lft:5163/");
 					  });
 });
 
@@ -58,9 +63,37 @@ builder.Services.AddScoped<IReadUsersMethods,  UtilisateurRepository>();
 builder.Services.AddScoped<IWriteUsersMethods, UtilisateurRepository>();
 builder.Services.AddScoped<IReadTasksMethods,  TacheRepository>();
 builder.Services.AddScoped<IWriteTasksMethods, TacheRepository>();
+builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("BasicAuthentication")
 	.AddScheme<AuthenticationSchemeOptions, AuthentificationBasic>("BasicAuthentication", options => { });
+	
+	
+ // Ajouter l'authentification JWT avec le nom "JwtAuthentification"
+builder.Services.AddAuthentication("JwtAuthentification")
+	// Ajouter le schéma d'authentification personnalisé JwtBearer avec les options par défaut
+	.AddScheme<JwtBearerOptions, JwtBearerAuthentification>("JwtAuthentification", options => 
+	{
+		var JwtSettings = builder.Configuration.GetSection("JwtSettings");
+		var secretKey= int.Parse(JwtSettings["SecretKey"]);
+		var randomSecretKey = new RandomUserSecret();
+		var signingKey=randomSecretKey.GenerateRandomKey(secretKey);
+		//options.SaveToken=true;
+		
+		
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = true,             // Valider l'émetteur (issuer) du jeton
+			ValidateAudience = true,           // Valider l'audience du jeton
+			ValidateLifetime = true,           // Valider la durée de vie du jeton
+			ValidateIssuerSigningKey = true,   // Valider la signature du jeton
+			 
+			ValidIssuer = JwtSettings["Issuer"],       // Émetteur (issuer) valide
+			ValidAudience =JwtSettings["Audience"],   // Audience valide
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)) // Clé de signature
+		};
+	});
+		
 
 builder.Services.AddAuthorization(options =>
  {
@@ -68,7 +101,7 @@ builder.Services.AddAuthorization(options =>
 	 options.AddPolicy("AdminPolicy", policy =>
 		 policy.RequireRole(nameof(Utilisateur.Privilege.Admin))
 			   .RequireAuthenticatedUser()
-			   .AddAuthenticationSchemes("BasicAuthentication"));
+			   .AddAuthenticationSchemes("JwtAuthentification"));
 
 
 	 // Politique d'autorisation pour les utilisateurs non-administrateurs
@@ -102,7 +135,7 @@ else if (app.Environment.IsProduction())
 app.UseCors(MyAllowSpecificOrigins);
 var rewriteOptions = new RewriteOptions()
 	 .AddRewrite(@"^www\.taskmoniroting/Taskmanagement", "https://localhost:7082/index.html", true);
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseRewriter(rewriteOptions);
 app.UseRouting();
 app.UseAuthentication();

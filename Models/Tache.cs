@@ -14,7 +14,6 @@ public class Tache
     [Key]
     public int? Matricule { get; set; }
     public string? Titre { get; set; }
-
     public string? Summary { get; set; }
 
     [Required(ErrorMessage="Le format de date doit etre comme l'exemple suivant : 01/01/2024")]
