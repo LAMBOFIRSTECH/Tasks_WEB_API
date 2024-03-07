@@ -47,7 +47,7 @@ builder.Services.AddCors(options =>
 	options.AddPolicy(name: MyAllowSpecificOrigins,
 					  policy =>
 					  {
-						  policy.WithOrigins("https://localhost:7082","http://lambo.lft:5163/");
+						  policy.WithOrigins("https://localhost:7082", "http://lambo.lft:5163/");
 					  });
 });
 
@@ -59,41 +59,41 @@ builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
 	opt.UseInMemoryDatabase(conStrings);
 });
 
-builder.Services.AddScoped<IReadUsersMethods,  UtilisateurRepository>();
+builder.Services.AddScoped<IReadUsersMethods, UtilisateurRepository>();
 builder.Services.AddScoped<IWriteUsersMethods, UtilisateurRepository>();
-builder.Services.AddScoped<IReadTasksMethods,  TacheRepository>();
+builder.Services.AddScoped<IReadTasksMethods, TacheRepository>();
 builder.Services.AddScoped<IWriteTasksMethods, TacheRepository>();
 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("BasicAuthentication")
 	.AddScheme<AuthenticationSchemeOptions, AuthentificationBasic>("BasicAuthentication", options => { });
-	
-	
- // Ajouter l'authentification JWT avec le nom "JwtAuthentification"
+
+
+// Ajouter l'authentification JWT avec le nom "JwtAuthentification"
 builder.Services.AddAuthentication("JwtAuthentification")
 	// Ajouter le schéma d'authentification personnalisé JwtBearer avec les options par défaut
-	.AddScheme<JwtBearerOptions, JwtBearerAuthentification>("JwtAuthentification", options => 
+	.AddScheme<JwtBearerOptions, JwtBearerAuthentification>("JwtAuthentification", options =>
 	{
 		var JwtSettings = builder.Configuration.GetSection("JwtSettings");
-		var secretKey= int.Parse(JwtSettings["SecretKey"]);
+		var secretKey = int.Parse(JwtSettings["SecretKey"]);
 		var randomSecretKey = new RandomUserSecret();
-		var signingKey=randomSecretKey.GenerateRandomKey(secretKey);
-		//options.SaveToken=true;
-		
-		
+		var signingKey = randomSecretKey.GenerateRandomKey(secretKey);
+
+		options.SaveToken = true;
+		options.RequireHttpsMetadata = false;
 		options.TokenValidationParameters = new TokenValidationParameters
 		{
 			ValidateIssuer = true,             // Valider l'émetteur (issuer) du jeton
 			ValidateAudience = true,           // Valider l'audience du jeton
 			ValidateLifetime = true,           // Valider la durée de vie du jeton
 			ValidateIssuerSigningKey = true,   // Valider la signature du jeton
-			 
+
 			ValidIssuer = JwtSettings["Issuer"],       // Émetteur (issuer) valide
-			ValidAudience =JwtSettings["Audience"],   // Audience valide
+			ValidAudience = JwtSettings["Audience"],   // Audience valide
 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)) // Clé de signature
 		};
 	});
-		
+
 
 builder.Services.AddAuthorization(options =>
  {
@@ -109,6 +109,7 @@ builder.Services.AddAuthorization(options =>
 		 policy.RequireRole(nameof(Utilisateur.Privilege.UserX))
 			   .RequireAuthenticatedUser()  // L'utilisateur doit être authentifié
 			   .AddAuthenticationSchemes("BasicAuthentication"));
+
  });
 
 var app = builder.Build();

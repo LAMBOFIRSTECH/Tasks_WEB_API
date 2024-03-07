@@ -37,7 +37,6 @@ public class Utilisateur
 	{
 		return BCrypt.Net.BCrypt.Verify(password, Pass);
 	}
-
 	public string SetHashPassword(string? password)
 	{
 

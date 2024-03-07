@@ -97,6 +97,7 @@ public class TasksManagementController : ControllerBase
 	/// </summary>
 	/// <param name="Matricule"></param>
 	/// <returns></returns>
+	[Authorize]
 	[HttpDelete("~/DeleteTask/{Matricule:int}")]
 	public async Task<IActionResult> DeleteTaskById(int Matricule)
 	{
@@ -123,6 +124,7 @@ public class TasksManagementController : ControllerBase
 	/// </summary>
 	/// <param name="tache"></param>
 	/// <returns></returns>
+	[Authorize]
 	[HttpPut("~/UpdateTask")]
 	public async Task<IActionResult> UpdateTask([FromBody] Tache tache)
 	{

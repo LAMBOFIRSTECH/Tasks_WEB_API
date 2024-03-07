@@ -5,7 +5,7 @@ namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
 [Route("api/v1.0/")]
-
+//[Authorize]
 public class UsersManagementController : ControllerBase
 {
 	private readonly IReadUsersMethods readMethods;
@@ -17,7 +17,7 @@ public class UsersManagementController : ControllerBase
 	/// Affiche la liste de tous les utilisateurs.
 	/// </summary>
 	//[Authorize(Policy = "AdminPolicy")]
-	[Authorize]
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/GetAllUsers")]
 	public async Task<ActionResult> GetUsers()
 	{
@@ -30,7 +30,8 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
-	//[Authorize(Policy = "UserPolicy")]
+	
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("~/SelectUser/{ID:int}")]
 	public async Task<ActionResult> GetUserById(int ID)
 	{
@@ -102,6 +103,7 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
+	[Authorize]
 	[HttpDelete("~/DeleteUser/{ID:int}")]
 	public async Task<IActionResult> DeleteUserById(int ID)
 	{
@@ -127,6 +129,7 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="utilisateur"></param>
 	/// <returns></returns>
+	[Authorize]
 	[HttpPut("~/UpdateUser")]
 	public async Task<IActionResult> UpdateUser([FromBody] Utilisateur utilisateur)
 	{

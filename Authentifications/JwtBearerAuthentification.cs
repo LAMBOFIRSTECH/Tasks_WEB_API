@@ -11,13 +11,12 @@ namespace Tasks_WEB_API.Authentifications
 	public class JwtBearerAuthentification : AuthenticationHandler<JwtBearerOptions>
 	{
 
-		public JwtBearerAuthentification( IOptionsMonitor<JwtBearerOptions> options,
+		public JwtBearerAuthentification(IOptionsMonitor<JwtBearerOptions> options,
 		ILoggerFactory logger,
 		UrlEncoder encoder,
 		ISystemClock clock)
 		: base(options, logger, encoder, clock)
 		{
-			
 			
 		}
 
@@ -32,14 +31,17 @@ namespace Tasks_WEB_API.Authentifications
 				if (!authHeader.Scheme.Equals("Bearer", StringComparison.OrdinalIgnoreCase))
 				{
 					return Task.FromResult(AuthenticateResult.Fail("Invalid authentication scheme"));
-				}	
+				}
 				// Récupérer le jeton JWT à partir de l'en-tête d'autorisation
 				var jwtToken = authHeader.Parameter;
 				var tokenValidationParameters = Options.TokenValidationParameters;
 				
+				
+				if (tokenValidationParameters == null)
+					return Task.FromResult(AuthenticateResult.Fail("Token validation parameters are not configured"));
 
 				var tokenHandler = new JwtSecurityTokenHandler();
-				SecurityToken securityToken;
+				SecurityToken securityToken;// ici ?
 				var principal = tokenHandler.ValidateToken(jwtToken, tokenValidationParameters, out securityToken);
 
 				// Créer un ticket d'authentification réussi avec le principal
