@@ -5,7 +5,7 @@ namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
 [Route("api/v1.0/")]
-//[Authorize]
+
 public class UsersManagementController : ControllerBase
 {
 	private readonly IReadUsersMethods readMethods;

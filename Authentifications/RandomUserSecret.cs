@@ -15,18 +15,18 @@ namespace Tasks_WEB_API.Authentifications
 			}
 
 			// Générer une nouvelle clé
-			string refreshToken = "";
+			string refreshKey = "";
 			var randomNumber = new byte[length];
 			using (var rng = RandomNumberGenerator.Create())
 			{
 				rng.GetBytes(randomNumber);
-				refreshToken = Convert.ToBase64String(randomNumber);
+				refreshKey = Convert.ToBase64String(randomNumber);
 			}
 
 			// Stocker la nouvelle clé dans le cache
-			keyCache[length] = refreshToken;
+			keyCache[length] = refreshKey;
 
-			return refreshToken;
+			return refreshKey;
 		}
 	}
 }

@@ -9,7 +9,6 @@ using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
 using Tasks_WEB_API.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -130,7 +129,6 @@ else if (app.Environment.IsProduction())
 	// Gérer les erreurs dans un environnement de production
 	app.UseExceptionHandler("/Error");
 	app.UseHsts();
-
 }
 
 app.UseCors(MyAllowSpecificOrigins);

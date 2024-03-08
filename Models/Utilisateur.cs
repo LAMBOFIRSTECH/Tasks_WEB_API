@@ -15,7 +15,7 @@ public class Utilisateur
 	[Required]
 	public int ID { get; set; }
 	public string? Nom { get; set; }
-	[Required(ErrorMessage="Le format d'adresse doit etre comme l'exemple suivant : <adress_name>@<mailing_server>.<domain>")]
+	[Required(ErrorMessage="<adress_name>@<mailing_server>.<domain>")]
 	[DataType(DataType.EmailAddress)]
 	[EmailAddress]
 	public string Email { get; set; }

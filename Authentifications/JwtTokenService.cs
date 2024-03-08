@@ -15,12 +15,9 @@ namespace Tasks_WEB_API.Authentifications
 
 		public JwtTokenService(DailyTasksMigrationsContext dataBaseMemoryContext, Microsoft.Extensions.Configuration.IConfiguration configuration)
 		{
-
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
 			this.configuration = configuration;
-
 		}
-
 		public string GetSigningKey()
 		{
 			var JwtSettings = configuration.GetSection("JwtSettings");
@@ -39,10 +36,11 @@ namespace Tasks_WEB_API.Authentifications
 			{
 				Subject = new ClaimsIdentity(new[] {
 					new Claim(ClaimTypes.Name, utilisateur.Nom),
-					new Claim(ClaimTypes.Email, utilisateur.Email)
-
+					new Claim(ClaimTypes.Email, utilisateur.Email),
+					new Claim(ClaimTypes.Role, utilisateur.Role.ToString())
 					}
 				),
+				
 				Expires = DateTime.UtcNow.AddMinutes(5),
 				SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature),
 				Audience = configuration.GetSection("JwtSettings")["Audience"],
@@ -53,5 +51,4 @@ namespace Tasks_WEB_API.Authentifications
 			return token;
 		}
 	}
-
 }

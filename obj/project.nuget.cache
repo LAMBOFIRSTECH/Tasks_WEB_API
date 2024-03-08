@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "M9p76WsXAHCs54SmLgQKcy1BCDDxon+ywyyaM1o2qbZciWrxzE2BHCy0sMS8wyAuGugE33THo2lH5pEIuV7nNw==",
+  "dgSpecHash": "iy4dP2iCnzrQ5Bj881MDfwLmxHOVTyTIH0jXCQ8LmOj/cV46nne1DYzbI7dXDHyPl84KjHNatEszq+4WJwuwnw==",
   "success": true,
   "projectFilePath": "/home/lambo-ubuntu/Tasks_WEB_API/Tasks_WEB_API.csproj",
   "expectedPackageFiles": [
@@ -48,6 +48,8 @@
     "/home/lambo-ubuntu/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.netcore.targets/1.1.0/microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/home/lambo-ubuntu/.nuget/packages/microsoft.testplatform.objectmodel/17.10.0-preview-24080-01/microsoft.testplatform.objectmodel.17.10.0-preview-24080-01.nupkg.sha512",
+    "/home/lambo-ubuntu/.nuget/packages/microsoft.testplatform.testhost/17.10.0-preview-24080-01/microsoft.testplatform.testhost.17.10.0-preview-24080-01.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/microsoft.win32.primitives/4.3.0/microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/moq/4.16.1/moq.4.16.1.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/netstandard.library/1.6.1/netstandard.library.1.6.1.nupkg.sha512",
@@ -115,6 +117,7 @@
     "/home/lambo-ubuntu/.nuget/packages/system.reflection.emit.ilgeneration/4.3.0/system.reflection.emit.ilgeneration.4.3.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/system.reflection.emit.lightweight/4.3.0/system.reflection.emit.lightweight.4.3.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/system.reflection.extensions/4.3.0/system.reflection.extensions.4.3.0.nupkg.sha512",
+    "/home/lambo-ubuntu/.nuget/packages/system.reflection.metadata/1.6.0/system.reflection.metadata.1.6.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/system.reflection.primitives/4.3.0/system.reflection.primitives.4.3.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/system.reflection.typeextensions/4.3.0/system.reflection.typeextensions.4.3.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/system.resources.resourcemanager/4.3.0/system.resources.resourcemanager.4.3.0.nupkg.sha512",
