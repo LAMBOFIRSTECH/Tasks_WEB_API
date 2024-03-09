@@ -4,13 +4,13 @@
         <name>Tasks_WEB_API</name>
     </assembly>
     <members>
-        <member name="M:Tasks_WEB_API.Repositories.TacheRepository.GetTaches">
+        <member name="M:Tasks_WEB_API.Repositories.TacheService.GetTaches">
             <summary>
             Renvoie la liste des taches.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Tasks_WEB_API.Repositories.TacheRepository.GetTaskById(System.Nullable{System.Int32})">
+        <member name="M:Tasks_WEB_API.Repositories.TacheService.GetTaskById(System.Nullable{System.Int32})">
             <summary>
             Renvoie une tache spécifique en fonction de son matricule
             </summary>
@@ -19,34 +19,34 @@
         </member>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.GetAllTasks">
             <summary>
-            Affiche la liste de toutes les taches
+            Affiche la liste de toutes les taches.
             </summary>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.SelectTask(System.Int32)">
             <summary>
-            Affiche les informations sur une tache précise
+            Affiche les informations sur une tache précise.
             </summary>
             <param name="Matricule"></param>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.CreateTask(Tasks_WEB_API.Tache)">
             <summary>
-            Crée une tache 
+            Crée une tache. 
             </summary>
             <param name="tache"></param>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.DeleteTaskById(System.Int32)">
             <summary>
-            Supprime une tache
+            Supprime une tache en fonction de son matricule.
             </summary>
             <param name="Matricule"></param>
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.TasksManagementController.UpdateTask(Tasks_WEB_API.Tache)">
             <summary>
-            Met à jour les informations d'une tache
+            Met à jour les informations d'une tache.
             </summary>
             <param name="tache"></param>
             <returns></returns>
@@ -58,7 +58,7 @@
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.GetUserById(System.Int32)">
             <summary>
-            Affiche les informations sur un utilisateur.
+            Affiche les informations sur un utilisateur en fonction de son ID.
             </summary>
             <param name="ID"></param>
             <returns></returns>
@@ -76,7 +76,7 @@
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.DeleteUserById(System.Int32)">
             <summary>
-            Supprime un utilisateur en fonction de son identifiant.
+            Supprime un utilisateur en fonction de son ID.
             </summary>
             <param name="ID"></param>
             <returns></returns>

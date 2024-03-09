@@ -21,17 +21,22 @@ namespace Tasks_WEB_API.Authentifications
 		public string GetSigningKey()
 		{
 			var JwtSettings = configuration.GetSection("JwtSettings");
-			int secretKey = int.Parse(JwtSettings["SecretKey"]);
+			int secretKeyLength = int.Parse(JwtSettings["SecretKey"]);
 			var randomSecretKey = new RandomUserSecret();
-			string signingKey = randomSecretKey.GenerateRandomKey(secretKey);
+			string signingKey = randomSecretKey.GenerateRandomKey(secretKeyLength);
 			return signingKey;
 		}
 		public string GenerateJwtToken(string email)
 		{
 			var utilisateur = dataBaseMemoryContext.Utilisateurs.Where(u => u.Email.ToUpper().Equals(email.ToUpper())).FirstOrDefault();
+			if (utilisateur is null)
+			{
+				throw new ArgumentException();
+			}
 			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GetSigningKey()));
 			var tokenHandler = new JwtSecurityTokenHandler();
 
+#pragma warning disable CS8604 // Possible null reference argument.
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 				Subject = new ClaimsIdentity(new[] {
@@ -40,12 +45,12 @@ namespace Tasks_WEB_API.Authentifications
 					new Claim(ClaimTypes.Role, utilisateur.Role.ToString())
 					}
 				),
-				
 				Expires = DateTime.UtcNow.AddMinutes(5),
-				SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature),
+				SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature),
 				Audience = configuration.GetSection("JwtSettings")["Audience"],
 				Issuer = configuration.GetSection("JwtSettings")["Issuer"],
 			};
+#pragma warning restore CS8604 // Possible null reference argument.
 			var tokenCreation = tokenHandler.CreateToken(tokenDescriptor);
 			var token = tokenHandler.WriteToken(tokenCreation);
 			return token;

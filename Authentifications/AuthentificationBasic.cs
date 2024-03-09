@@ -17,7 +17,6 @@ namespace Tasks_WEB_API.Repositories
 		: base(options, logger, encoder, clock)
 		{
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
-
 		}
 		protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
 		{
@@ -69,7 +68,7 @@ namespace Tasks_WEB_API.Repositories
 			var utilisateur = dataBaseMemoryContext.Utilisateurs.FirstOrDefault(u => u.Nom == username);
 			if (utilisateur != null)
 			{
-				return utilisateur.ChechHashPassword(password);
+				return utilisateur.CheckHashPassword(password);
 			}
 			await Task.Delay(1000);
 			return false;

@@ -3,7 +3,7 @@ using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
 namespace Tasks_WEB_API.Controllers
 {
-    [Route("[controller]")]
+	[Route("[controller]")]
 	public class AccessTokenController : ControllerBase
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;

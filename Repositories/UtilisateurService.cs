@@ -3,10 +3,10 @@ using Tasks_WEB_API.Interfaces;
 using Tasks_WEB_API.Models;
 namespace Tasks_WEB_API.Repositories
 {
-	public class UtilisateurRepository : IReadUsersMethods, IWriteUsersMethods
+	public class UtilisateurService : IReadUsersMethods, IWriteUsersMethods
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
-		public UtilisateurRepository(DailyTasksMigrationsContext dataBaseMemoryContext)
+		public UtilisateurService(DailyTasksMigrationsContext dataBaseMemoryContext)
 		{
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
 		}
@@ -30,7 +30,7 @@ namespace Tasks_WEB_API.Repositories
 			{
 				utilisateur.SetHashPassword(password);
 			}
-			var check = utilisateur.ChechHashPassword(password);
+			var check = utilisateur.CheckHashPassword(password);
 			if (check)
 			{
 				await dataBaseMemoryContext.Utilisateurs.AddAsync(utilisateur);
@@ -64,7 +64,7 @@ namespace Tasks_WEB_API.Repositories
 			{
 				utilisateur1.SetHashPassword(password);
 			}
-			var check = utilisateur1.ChechHashPassword(password);
+			var check = utilisateur1.CheckHashPassword(password);
 			if (check)
 			{
 				dataBaseMemoryContext.Utilisateurs.Add(utilisateur1);

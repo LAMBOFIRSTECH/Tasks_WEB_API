@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "iy4dP2iCnzrQ5Bj881MDfwLmxHOVTyTIH0jXCQ8LmOj/cV46nne1DYzbI7dXDHyPl84KjHNatEszq+4WJwuwnw==",
+  "dgSpecHash": "mPvh6gfP4VtODryHTRs9KrRyVWH0+IfjUYZaInScT7HB76t4CbwhbjhFBVhgvgRRxADb8q3KBTPOu7lJzcZ0IA==",
   "success": true,
   "projectFilePath": "/home/lambo-ubuntu/Tasks_WEB_API/Tasks_WEB_API.csproj",
   "expectedPackageFiles": [
@@ -75,6 +75,7 @@
     "/home/lambo-ubuntu/.nuget/packages/sqlitepclraw.lib.e_sqlite3/2.0.4/sqlitepclraw.lib.e_sqlite3.2.0.4.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/sqlitepclraw.provider.dynamic_cdecl/2.0.4/sqlitepclraw.provider.dynamic_cdecl.2.0.4.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "/home/lambo-ubuntu/.nuget/packages/swashbuckle.aspnetcore.annotations/6.5.0/swashbuckle.aspnetcore.annotations.6.5.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
     "/home/lambo-ubuntu/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.5.0/swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",

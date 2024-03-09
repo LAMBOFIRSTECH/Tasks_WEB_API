@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tasks_WEB_API.Repositories
 {
-	public class TacheRepository :IReadTasksMethods,IWriteTasksMethods
+	public class TacheService :IReadTasksMethods,IWriteTasksMethods
 	{
 		private readonly DailyTasksMigrationsContext dataBaseMemoryContext;
-		public TacheRepository(DailyTasksMigrationsContext dataBaseMemoryContext)
+		public TacheService(DailyTasksMigrationsContext dataBaseMemoryContext)
 		{
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
 		}

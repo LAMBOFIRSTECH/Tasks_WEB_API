@@ -18,7 +18,7 @@ public class TasksManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Affiche la liste de toutes les taches
+	/// Affiche la liste de toutes les taches.
 	/// </summary>
 	/// <returns></returns>
 	[Authorize(Policy = "UserPolicy")]
@@ -30,12 +30,12 @@ public class TasksManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Affiche les informations sur une tache précise
+	/// Affiche les informations sur une tache précise.
 	/// </summary>
 	/// <param name="Matricule"></param>
 	/// <returns></returns>
 	[Authorize(Policy = "UserPolicy")]
-	[HttpGet("~/SelectTask/{Matricule:int}")]
+	[HttpGet("~/GetTaskByID/{Matricule:int}")]
 	public async Task<IActionResult> SelectTask(int Matricule)
 	{
 		try
@@ -54,7 +54,7 @@ public class TasksManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Crée une tache 
+	/// Crée une tache. 
 	/// </summary>
 	/// <param name="tache"></param>
 	/// <returns></returns>
@@ -93,11 +93,11 @@ public class TasksManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Supprime une tache
+	/// Supprime une tache en fonction de son matricule.
 	/// </summary>
 	/// <param name="Matricule"></param>
 	/// <returns></returns>
-	[Authorize]
+	[Authorize(Policy = "AdminPolicy")]
 	[HttpDelete("~/DeleteTask/{Matricule:int}")]
 	public async Task<IActionResult> DeleteTaskById(int Matricule)
 	{
@@ -120,11 +120,11 @@ public class TasksManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Met à jour les informations d'une tache
+	/// Met à jour les informations d'une tache.
 	/// </summary>
 	/// <param name="tache"></param>
 	/// <returns></returns>
-	[Authorize]
+	[Authorize(Policy = "AdminPolicy")]
 	[HttpPut("~/UpdateTask")]
 	public async Task<IActionResult> UpdateTask([FromBody] Tache tache)
 	{

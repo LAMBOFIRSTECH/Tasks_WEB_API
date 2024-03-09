@@ -47,9 +47,11 @@ public class LoginTest
 		var controller1 = new AccessTokenController(dailyTasks, null!);
 		var controller2 = new AccessTokenController(dailyTasks, jwtTokenService.Object);
 
-		//Act
-		var result1 = await controller1.Login(null);
-		var result2 = await controller1.Login("titi@gmail.com");
+        //Act
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        var result1 = await controller1.Login(null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        var result2 = await controller1.Login("titi@gmail.com");
 		var result3 = await controller1.Login("name@gmail.com");
 		var result4 = await controller2.Login("toto@gmail.com");
 

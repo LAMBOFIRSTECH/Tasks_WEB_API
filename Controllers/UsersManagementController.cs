@@ -1,13 +1,20 @@
+using System.ComponentModel;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Text.Json.Serialization.Metadata;
 using Tasks_WEB_API.Interfaces;
+
+
 namespace Tasks_WEB_API.Controllers;
 
 [ApiController]
-[Route("api/v1.0/")]
-
+[Route("api/v1.0/[controller]/")]
+[Produces("application/json")]
 public class UsersManagementController : ControllerBase
 {
+  
 	private readonly IReadUsersMethods readMethods;
 	private readonly IWriteUsersMethods writeMethods;
 
@@ -17,22 +24,20 @@ public class UsersManagementController : ControllerBase
 	/// Affiche la liste de tous les utilisateurs.
 	/// </summary>
 	//[Authorize(Policy = "AdminPolicy")]
-	[Authorize(Policy = "UserPolicy")]
-	[HttpGet("~/GetAllUsers")]
+	//[Authorize(Policy = "UserPolicy")]
+	[HttpGet("GetAllUsers")]
 	public async Task<ActionResult> GetUsers()
 	{
-		var users = await readMethods.GetUsers();
-		return Ok(users);
+		return Ok(await readMethods.GetUsers());
 	}
 
 	/// <summary>
-	/// Affiche les informations sur un utilisateur.
+	/// Affiche les informations sur un utilisateur en fonction de son ID.
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
-	
 	[Authorize(Policy = "UserPolicy")]
-	[HttpGet("~/SelectUser/{ID:int}")]
+	[HttpGet("GetUserByID/{ID:int}")]
 	public async Task<ActionResult> GetUserById(int ID)
 	{
 		try
@@ -59,7 +64,7 @@ public class UsersManagementController : ControllerBase
 	/// <param name="role"></param>
 	/// <param name="email"></param>
 	/// <returns></returns>
-	[HttpPost("~/CreateUser/")]
+	[HttpPost("CreateUser/")]
 	public async Task<IActionResult> CreateUser(int identifiant, string nom, string mdp, string role, string email)
 	{
 		try
@@ -99,12 +104,12 @@ public class UsersManagementController : ControllerBase
 	}
 
 	/// <summary>
-	/// Supprime un utilisateur en fonction de son identifiant.
+	/// Supprime un utilisateur en fonction de son ID.
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
-	[Authorize]
-	[HttpDelete("~/DeleteUser/{ID:int}")]
+	//[Authorize(Policy = "AdminPolicy")]
+	[HttpDelete("DeleteUser/{ID:int}")]
 	public async Task<IActionResult> DeleteUserById(int ID)
 	{
 		var utilisateur = await readMethods.GetUserById(ID);
@@ -129,8 +134,8 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="utilisateur"></param>
 	/// <returns></returns>
-	[Authorize]
-	[HttpPut("~/UpdateUser")]
+	//[Authorize(Policy = "AdminPolicy")]
+	[HttpPut("UpdateUser")]
 	public async Task<IActionResult> UpdateUser([FromBody] Utilisateur utilisateur)
 	{
 		try

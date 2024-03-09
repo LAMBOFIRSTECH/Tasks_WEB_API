@@ -41,7 +41,7 @@ namespace Tasks_WEB_API.Authentifications
 					return Task.FromResult(AuthenticateResult.Fail("Token validation parameters are not configured"));
 
 				var tokenHandler = new JwtSecurityTokenHandler();
-				SecurityToken securityToken;// ici ?
+				SecurityToken securityToken;
 				var principal = tokenHandler.ValidateToken(jwtToken, tokenValidationParameters, out securityToken);
 
 				// Créer un ticket d'authentification réussi avec le principal

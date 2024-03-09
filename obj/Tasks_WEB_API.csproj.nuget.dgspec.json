@@ -80,6 +80,10 @@
               "target": "Package",
               "version": "[6.5.0, )"
             },
+            "Swashbuckle.AspNetCore.Annotations": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
             "xunit": {
               "target": "Package",
               "version": "[2.4.1, )"

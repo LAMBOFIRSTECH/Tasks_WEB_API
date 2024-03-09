@@ -11,6 +11,7 @@ using Tasks_WEB_API.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Tasks_WEB_API.SwaggerFilters;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,7 @@ builder.Services.AddSwaggerGen(con =>
 			Url = new Uri("https://example.com/license")
 		}
 	});
+	 con.OperationFilter<RemoveParameterFilter>(); 
 
 	var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 	con.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
@@ -58,10 +60,10 @@ builder.Services.AddDbContext<DailyTasksMigrationsContext>(opt =>
 	opt.UseInMemoryDatabase(conStrings);
 });
 
-builder.Services.AddScoped<IReadUsersMethods, UtilisateurRepository>();
-builder.Services.AddScoped<IWriteUsersMethods, UtilisateurRepository>();
-builder.Services.AddScoped<IReadTasksMethods, TacheRepository>();
-builder.Services.AddScoped<IWriteTasksMethods, TacheRepository>();
+builder.Services.AddScoped<IReadUsersMethods, UtilisateurService>();
+builder.Services.AddScoped<IWriteUsersMethods, UtilisateurService>();
+builder.Services.AddScoped<IReadTasksMethods, TacheService>();
+builder.Services.AddScoped<IWriteTasksMethods, TacheService>();
 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("BasicAuthentication")
@@ -74,9 +76,9 @@ builder.Services.AddAuthentication("JwtAuthentification")
 	.AddScheme<JwtBearerOptions, JwtBearerAuthentification>("JwtAuthentification", options =>
 	{
 		var JwtSettings = builder.Configuration.GetSection("JwtSettings");
-		var secretKey = int.Parse(JwtSettings["SecretKey"]);
+		var secretKeyLength = int.Parse(JwtSettings["SecretKey"]);
 		var randomSecretKey = new RandomUserSecret();
-		var signingKey = randomSecretKey.GenerateRandomKey(secretKey);
+		var signingKey = randomSecretKey.GenerateRandomKey(secretKeyLength);
 
 		options.SaveToken = true;
 		options.RequireHttpsMetadata = false;
@@ -121,6 +123,7 @@ if (app.Environment.IsDevelopment())
 		 con.SwaggerEndpoint("/swagger/1.0/swagger.json", "Daily Tasks Management API");
 
 		 con.RoutePrefix = string.Empty;
+		
 	 });
 }
 else if (app.Environment.IsProduction())
