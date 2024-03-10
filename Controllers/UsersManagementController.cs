@@ -1,9 +1,6 @@
-using System.ComponentModel;
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Text.Json.Serialization.Metadata;
 using Tasks_WEB_API.Interfaces;
 
 
@@ -12,13 +9,15 @@ namespace Tasks_WEB_API.Controllers;
 [ApiController]
 [Route("api/v1.0/[controller]/")]
 [Produces("application/json")]
+// [SwaggerSchemaFilter(typeof(HidePasswordFilter))]
+// [SwaggerSchema(Description = "Mot de passe de l'utilisateur", Format = "password")]
 public class UsersManagementController : ControllerBase
 {
-  
+
 	private readonly IReadUsersMethods readMethods;
 	private readonly IWriteUsersMethods writeMethods;
 
-	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods){ this.readMethods = readMethods; this.writeMethods = writeMethods; }
+	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods) { this.readMethods = readMethods; this.writeMethods = writeMethods; }
 
 	/// <summary>
 	/// Affiche la liste de tous les utilisateurs.
@@ -64,9 +63,25 @@ public class UsersManagementController : ControllerBase
 	/// <param name="role"></param>
 	/// <param name="email"></param>
 	/// <returns></returns>
+	/// <remarks>
+	/// Sample request:
+	///
+	///     POST /CreateUser
+	///     {
+	///        "id": This value is autoincremented,
+	///        "Nom": "username",
+	///        "mdp": "password",
+	///        "role": "UserX",
+	///        "email": "adress_name@mailing_server.domain"
+	///        
+	///     }
+	///
+	/// </remarks>
+
 	[HttpPost("CreateUser/")]
-	public async Task<IActionResult> CreateUser(int identifiant, string nom, string mdp, string role, string email)
+	public async Task<IActionResult> CreateUser(int identifiant, string nom, [DataType(DataType.Password)] string mdp, string role, string email)
 	{
+		
 		try
 		{
 			Utilisateur.Privilege privilege;
@@ -155,3 +170,4 @@ public class UsersManagementController : ControllerBase
 		}
 	}
 }
+

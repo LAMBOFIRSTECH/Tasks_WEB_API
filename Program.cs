@@ -12,15 +12,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Tasks_WEB_API.SwaggerFilters;
+using Tasks_WEB_API.Controllers;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(con =>
+builder.Services.AddSwaggerGen(opt =>
 {
-	con.SwaggerDoc("1.0", new OpenApiInfo
+	opt.SwaggerDoc("1.0", new OpenApiInfo
 	{
 		Title = "DailyTasks | Api",
 		Description = "An ASP.NET Core Web API for managing Tasks App",
@@ -36,10 +37,9 @@ builder.Services.AddSwaggerGen(con =>
 			Url = new Uri("https://example.com/license")
 		}
 	});
-	 con.OperationFilter<RemoveParameterFilter>(); 
-
+	opt.OperationFilter<RemoveParameterFilter>();
 	var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-	con.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+	opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
 });
 
@@ -123,7 +123,10 @@ if (app.Environment.IsDevelopment())
 		 con.SwaggerEndpoint("/swagger/1.0/swagger.json", "Daily Tasks Management API");
 
 		 con.RoutePrefix = string.Empty;
-		
+		 con.HeadContent = @"
+		<script src='js/mask-password.js'></script>
+	";
+
 	 });
 }
 else if (app.Environment.IsProduction())

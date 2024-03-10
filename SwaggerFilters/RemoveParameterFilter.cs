@@ -13,13 +13,17 @@ namespace Tasks_WEB_API.SwaggerFilters
 		public void Apply(OpenApiOperation operation, OperationFilterContext context)
 		{
 			var parameters = operation.Parameters;
+
 			var parameterToRemove = parameters.FirstOrDefault(p => p.Name == "identifiant");
-			var parameterUrl = parameters.FirstOrDefault(p => p.Name== "mdp");
+			var parameterToHide = parameters.FirstOrDefault(p => p.Name == "mdp");
+
 			if (parameterToRemove != null)
 			{
 				parameters.Remove(parameterToRemove);
-				
+
 			}
+
+			
 		}
 	}
 }

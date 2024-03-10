@@ -6,11 +6,13 @@ using System.Xml.Serialization;
 using Microsoft.AspNetCore.Components;
 using Swashbuckle.AspNetCore.Annotations;
 using Newtonsoft.Json;
+using Tasks_WEB_API.SwaggerFilters;
 
 namespace Tasks_WEB_API;
 /// <summary>
 /// Représente un utilisateur dans le système.
 /// </summary>
+
 public class Utilisateur
 {
 	/// <summary>
@@ -21,7 +23,7 @@ public class Utilisateur
 	[Required]
 	public string? Nom { get; set; }
 	
-	[Required(ErrorMessage = "<adress_name>@<mailing_server>.<domain>")]
+	[Required]
 	[DataType(DataType.EmailAddress)]
 	[EmailAddress]
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -30,12 +32,12 @@ public class Utilisateur
 
 	public enum Privilege { Admin, UserX }
 	[EnumDataType(typeof(Privilege))]
-	//[Column(TypeName = "nvarchar(24)")]
 	[Required]
 	public Privilege Role { get; set; }
+	
 	[Required]
 	[System.Text.Json.Serialization.JsonIgnore] // set à disable le mot de passe dans la serialisation json
-	[DataType(DataType.Password)]
+	[SwaggerSchema(Description = "Mot de passe de l'utilisateur", Format = "password")]
 	public string? Pass { get; set; }
 	public bool CheckHashPassword(string? password)
 	{

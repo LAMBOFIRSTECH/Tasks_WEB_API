@@ -64,15 +64,29 @@
             <returns></returns>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.CreateUser(System.Int32,System.String,System.String,System.String,System.String)">
-            <summary>
-            Créée un utilisateur.
-            </summary>
-            <param name="identifiant"></param>
-            <param name="nom"></param>
-            <param name="mdp"></param>
-            <param name="role"></param>
-            <param name="email"></param>
-            <returns></returns>
+             <summary>
+             Créée un utilisateur.
+             </summary>
+             <param name="identifiant"></param>
+             <param name="nom"></param>
+             <param name="mdp"></param>
+             <param name="role"></param>
+             <param name="email"></param>
+             <returns></returns>
+             <remarks>
+             Sample request:
+            
+                 POST /CreateUser
+                 {
+                    "id": This value is autoincremented,
+                    "Nom": "username",
+                    "mdp": "password",
+                    "role": "UserX",
+                    "email": "adress_name@mailing_server.domain"
+                    
+                 }
+            
+             </remarks>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.DeleteUserById(System.Int32)">
             <summary>
