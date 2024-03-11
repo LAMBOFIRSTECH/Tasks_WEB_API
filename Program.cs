@@ -123,9 +123,6 @@ if (app.Environment.IsDevelopment())
 		 con.SwaggerEndpoint("/swagger/1.0/swagger.json", "Daily Tasks Management API");
 
 		 con.RoutePrefix = string.Empty;
-		 con.HeadContent = @"
-		<script src='js/mask-password.js'></script>
-	";
 
 	 });
 }

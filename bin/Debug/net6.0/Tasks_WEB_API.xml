@@ -82,10 +82,8 @@
                     "Nom": "username",
                     "mdp": "password",
                     "role": "UserX",
-                    "email": "adress_name@mailing_server.domain"
-                    
+                    "email": "adress_name@mailing_server.domain"  
                  }
-            
              </remarks>
         </member>
         <member name="M:Tasks_WEB_API.Controllers.UsersManagementController.DeleteUserById(System.Int32)">

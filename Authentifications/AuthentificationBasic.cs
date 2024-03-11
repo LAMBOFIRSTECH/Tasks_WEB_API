@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using Tasks_WEB_API.Interfaces;
 namespace Tasks_WEB_API.Repositories
 {
 	public class AuthentificationBasic : AuthenticationHandler<AuthenticationSchemeOptions>
@@ -18,51 +19,53 @@ namespace Tasks_WEB_API.Repositories
 		{
 			this.dataBaseMemoryContext = dataBaseMemoryContext;
 		}
+		
 		protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
 		{
 			if (!Request.Headers.ContainsKey("Authorization"))
 				return AuthenticateResult.Fail("Authorization header missing");
 
-				try
+			try
+			{
+				var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+				if (authHeader.Scheme.Equals("Basic", StringComparison.OrdinalIgnoreCase))
 				{
-					var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
-					if (authHeader.Scheme.Equals("Basic", StringComparison.OrdinalIgnoreCase))
+					var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
+					var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
+					var username = credentials[0];
+					var password = credentials[1];
+					if (await IsValidCredentials(username, password))
 					{
-						var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-						var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
-						var username = credentials[0];
-						var password = credentials[1];
-						if (await IsValidCredentials(username, password))
+						// Créer un ClaimsPrincipal avec le nom et le privilege de l'utilisateur playload du token
+						var claims = new[]
 						{
-							// Créer un ClaimsPrincipal avec le nom et le privilege de l'utilisateur playload du token
-							var claims = new[]
-							{
 							new Claim(ClaimTypes.Name, username),
 							new Claim(ClaimTypes.Role, Utilisateur.Privilege.UserX.ToString())
 							};
 
-							var identity = new ClaimsIdentity(claims, Scheme.Name);
-							var principal = new ClaimsPrincipal(identity);
-							// Assigner le principal à la propriété Principal de l'objet context
-							var ticket = new AuthenticationTicket(principal, Scheme.Name);//signature header http --> Authorization: Basic am9objpwYXNzd29yZA==
+						var identity = new ClaimsIdentity(claims, Scheme.Name);
+						var principal = new ClaimsPrincipal(identity);
+						// Assigner le principal à la propriété Principal de l'objet context
+						var ticket = new AuthenticationTicket(principal, Scheme.Name);//signature header http --> Authorization: Basic am9objpwYXNzd29yZA==
 
-							return AuthenticateResult.Success(ticket);
-						}
-						else
-						{
-							return AuthenticateResult.Fail("Invalid username or password");
-						}
+						return AuthenticateResult.Success(ticket);
 					}
 					else
 					{
-						return AuthenticateResult.NoResult();
+						return AuthenticateResult.Fail("Invalid username or password");
 					}
 				}
-				catch (Exception ex)
+				else
 				{
-					return AuthenticateResult.Fail($"Authentication failed: {ex.Message}");
+					return AuthenticateResult.NoResult();
 				}
+			}
+			catch (Exception ex)
+			{
+				return AuthenticateResult.Fail($"Authentication failed: {ex.Message}");
+			}
 		}
+
 		private async Task<bool> IsValidCredentials(string username, string password)
 		{
 			var utilisateur = dataBaseMemoryContext.Utilisateurs.FirstOrDefault(u => u.Nom == username);
@@ -73,5 +76,7 @@ namespace Tasks_WEB_API.Repositories
 			await Task.Delay(1000);
 			return false;
 		}
-	}
+
+       
+    }
 }

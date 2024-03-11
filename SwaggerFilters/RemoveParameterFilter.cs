@@ -15,15 +15,10 @@ namespace Tasks_WEB_API.SwaggerFilters
 			var parameters = operation.Parameters;
 
 			var parameterToRemove = parameters.FirstOrDefault(p => p.Name == "identifiant");
-			var parameterToHide = parameters.FirstOrDefault(p => p.Name == "mdp");
-
 			if (parameterToRemove != null)
 			{
 				parameters.Remove(parameterToRemove);
-
-			}
-
-			
+			}	
 		}
 	}
 }

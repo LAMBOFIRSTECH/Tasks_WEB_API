@@ -9,22 +9,18 @@ namespace Tasks_WEB_API.Controllers;
 [ApiController]
 [Route("api/v1.0/[controller]/")]
 [Produces("application/json")]
-// [SwaggerSchemaFilter(typeof(HidePasswordFilter))]
-// [SwaggerSchema(Description = "Mot de passe de l'utilisateur", Format = "password")]
 public class UsersManagementController : ControllerBase
 {
-
 	private readonly IReadUsersMethods readMethods;
 	private readonly IWriteUsersMethods writeMethods;
-
 	public UsersManagementController(IReadUsersMethods readMethods, IWriteUsersMethods writeMethods) { this.readMethods = readMethods; this.writeMethods = writeMethods; }
 
 	/// <summary>
 	/// Affiche la liste de tous les utilisateurs.
 	/// </summary>
-	//[Authorize(Policy = "AdminPolicy")]
-	//[Authorize(Policy = "UserPolicy")]
+	[Authorize(Policy = "UserPolicy")]
 	[HttpGet("GetAllUsers")]
+	//[Authorize(Policy = "AdminPolicy",Roles =nameof(Utilisateur.Privilege.Admin))]
 	public async Task<ActionResult> GetUsers()
 	{
 		return Ok(await readMethods.GetUsers());
@@ -72,16 +68,13 @@ public class UsersManagementController : ControllerBase
 	///        "Nom": "username",
 	///        "mdp": "password",
 	///        "role": "UserX",
-	///        "email": "adress_name@mailing_server.domain"
-	///        
+	///        "email": "adress_name@mailing_server.domain"  
 	///     }
-	///
 	/// </remarks>
 
 	[HttpPost("CreateUser/")]
 	public async Task<IActionResult> CreateUser(int identifiant, string nom, [DataType(DataType.Password)] string mdp, string role, string email)
 	{
-		
 		try
 		{
 			Utilisateur.Privilege privilege;
@@ -89,7 +82,6 @@ public class UsersManagementController : ControllerBase
 			{
 				return BadRequest("Le rôle spécifié n'est pas valide.");
 			}
-
 			Utilisateur newUtilisateur = new()
 			{
 				ID = identifiant,
@@ -98,7 +90,6 @@ public class UsersManagementController : ControllerBase
 				Role = privilege,
 				Email = email
 			};
-
 			var listUtilisateurs = await readMethods.GetUsers();
 			foreach (var item in listUtilisateurs)
 			{
@@ -107,9 +98,7 @@ public class UsersManagementController : ControllerBase
 					return Conflict("Cet utilisateur est déjà présent");
 				}
 			}
-
 			await writeMethods.CreateUser(newUtilisateur);
-
 			return Ok("La ressource a bien été créée");
 		}
 		catch (Exception)
@@ -117,13 +106,12 @@ public class UsersManagementController : ControllerBase
 			return StatusCode(StatusCodes.Status500InternalServerError, "Erreur lors de la création d'un utilisateur");
 		}
 	}
-
 	/// <summary>
 	/// Supprime un utilisateur en fonction de son ID.
 	/// </summary>
 	/// <param name="ID"></param>
 	/// <returns></returns>
-	//[Authorize(Policy = "AdminPolicy")]
+	[Authorize(Policy = "AdminPolicy")]
 	[HttpDelete("DeleteUser/{ID:int}")]
 	public async Task<IActionResult> DeleteUserById(int ID)
 	{
@@ -149,7 +137,7 @@ public class UsersManagementController : ControllerBase
 	/// </summary>
 	/// <param name="utilisateur"></param>
 	/// <returns></returns>
-	//[Authorize(Policy = "AdminPolicy")]
+	[Authorize(Policy = "AdminPolicy")]
 	[HttpPut("UpdateUser")]
 	public async Task<IActionResult> UpdateUser([FromBody] Utilisateur utilisateur)
 	{

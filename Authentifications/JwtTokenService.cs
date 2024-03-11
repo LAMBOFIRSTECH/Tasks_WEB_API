@@ -45,7 +45,7 @@ namespace Tasks_WEB_API.Authentifications
 					new Claim(ClaimTypes.Role, utilisateur.Role.ToString())
 					}
 				),
-				Expires = DateTime.UtcNow.AddMinutes(5),
+				Expires = DateTime.UtcNow.AddMinutes(50),
 				SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature),
 				Audience = configuration.GetSection("JwtSettings")["Audience"],
 				Issuer = configuration.GetSection("JwtSettings")["Issuer"],
